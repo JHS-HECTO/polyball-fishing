@@ -13,12 +13,33 @@ html, body {
 }
 
 body {
-  background: var(--colors-bg);
+  background: #1D3557;
   color: var(--colors-text);
   font-size: 1.6rem;
   line-height: 1.5;
   overflow-x: hidden;
   min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  justify-content: center;
+}
+
+// Phone-shaped frame. Constrains layout to mobile width even on desktop.
+// `contain: layout style` makes `position: fixed` descendants relative to this frame,
+// so modals don't escape into the dark letterbox area.
+.appFrame {
+  position: relative;
+  width: 100%;
+  max-width: 48rem; // ~480px = typical phone width upper bound
+  min-height: 100vh;
+  min-height: 100dvh;
+  background: var(--colors-bg);
+  overflow: hidden;
+  // `contain: paint` establishes a containing block so descendants with
+  // `position: fixed` (modals, fight overlay) stay inside the phone frame
+  // instead of escaping into the desktop letterbox area.
+  contain: layout paint style;
+  box-shadow: 0 0 4rem rgba(0, 0, 0, 0.35);
 }
 
 button {
