@@ -21,6 +21,7 @@ import {
 import { vibrate } from 'lib/haptics';
 import {
   sendPlayAd,
+  sendReady,
   sendTicketReward,
   sendScoreUpdate,
   onMessage,
@@ -44,6 +45,8 @@ export default function PlayPage() {
   const bumpCastsSinceAd = useGameStore((s) => s.bumpCastsSinceAd);
   const resetCastsSinceAd = useGameStore((s) => s.resetCastsSinceAd);
 
+  const registerPlayer = useGameStore((s) => s.registerPlayer);
+
   const [phase, setPhase] = useState<Phase>('idle');
   const [grade, setGrade] = useState<FishGrade>('trash');
   const [species, setSpecies] = useState<FishSpecies | undefined>(undefined);
@@ -57,10 +60,18 @@ export default function PlayPage() {
     setMounted(true);
     const daily = readDaily(todayString());
     setFishToday(daily.fishCaught);
+    // Tell parent we're ready to receive FISH:SET_PLAYER injection.
+    sendReady();
   }, []);
 
   useEffect(() => {
     const cleanup = onMessage((msg: FishParentMessage) => {
+      if (msg.type === 'FISH:SET_PLAYER') {
+        registerPlayer(msg.player);
+        if (typeof msg.total_score === 'number') {
+          useGameStore.getState().setTotalScore(msg.total_score);
+        }
+      }
       if (msg.type === 'FISH:AD_COMPLETED' || msg.type === 'FISH:AD_FAILED') {
         setPhase('idle');
       }
@@ -73,7 +84,7 @@ export default function PlayPage() {
       }
     });
     return cleanup;
-  }, []);
+  }, [registerPlayer]);
 
   const startCast = () => {
     if (phase !== 'idle') return;
