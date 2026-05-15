@@ -9,6 +9,8 @@ export function Lake({ children }: { children?: React.ReactNode }) {
         <div className={styles.lake__wave} />
         <div className={styles.lake__wave} style={{ animationDelay: '0.6s' }} />
       </div>
+      <div className={styles.lake__beach} />
+      <div className={styles.lake__ground} />
       {children}
     </div>
   );

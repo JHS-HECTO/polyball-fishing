@@ -25,11 +25,35 @@
 
 ---
 
-## 2. 낚시꾼 캐릭터 (스프라이트)
+## 2. 낚시꾼 캐릭터 (뒷모습 스프라이트)
 저장: `public/images/angler.png` · **3:4** (768×1024) · 투명 배경
 
+> 게임 구도: 호수가 위쪽, 캐릭터는 화면 아래쪽 정중앙. 플레이어는 캐릭터의 **뒷모습을 위에서 살짝 내려다보는 각도**로 본다.
+
 ```
-3D rendered character render in the Animal Crossing: New Horizons visual style. Vertical 3:4 portrait sprite, a single character centered with empty transparent space around it. A chibi human angler sitting cross-legged in side three-quarter view facing right, holding a small short fishing rod that extends diagonally upward to the right. Round head with simple dot eyes and small smile, wearing a wide-brimmed straw hat with a soft cream band, and a soft mint-green short-sleeve shirt with rolled-up beige pants. Big head, small body, short stubby limbs — classic Animal Crossing villager proportions. Happy peaceful expression. Matte plastic/clay material on skin and clothing, soft ambient occlusion under the hat, gentle warm golden hour rim light from upper right. No background, no dock, no water, no ground — character only on transparent background. Animal Crossing: New Horizons 3D game art style, low-poly geometry with smoothed rounded edges, vinyl figure quality, soft Pixar-like lighting, soft subsurface scattering. PNG with transparent background. Avoid: 2D illustration, flat vector art, anime, manga, line art, hand-drawn sketch, watercolor, painting, photographic realism, dark, gritty, horror, blood, weapon, text, watermark, signature, low quality, blurry, oversaturated, neon, sharp shadows, hard outlines, cel-shading lines, multiple characters, background scenery, horizontal composition.
+3D rendered Nintendo Switch in-game character render in the Animal Crossing: New Horizons visual style. Vertical 3:4 portrait sprite, a single character centered with empty transparent space around it. A chibi human angler shown from BEHIND (back view), seated cross-legged facing AWAY from the camera, looking forward toward a distant lake (the lake itself is not drawn here — only the character). We see the back of the head, the round dome of the straw hat from a slightly elevated angle (so the brim disc is visible curving around the head), the back of the torso, and a small fishing rod held in the right hand extending diagonally up-right out of frame. Big round head, small chunky body, short stubby arms — classic Animal Crossing villager proportions. The straw hat is wide-brimmed in warm cream and soft tan. The shirt is soft mint-green short-sleeve. Pants are rolled-up beige. NO face visible (back of head only — short tuft of brown hair just below the hat brim). PBR matte plastic/clay material on skin and clothing, painterly fabric texture, soft ambient occlusion under the hat brim onto the neck/shoulders, gentle warm golden hour rim light from upper-back-right giving a soft glow on the hat top and shoulders. No background, no dock, no water, no ground — character only on transparent background. Animal Crossing: New Horizons 3D game art style, low-poly geometry with smoothed rounded edges, vinyl figure quality, soft Pixar-like atmospheric lighting, soft subsurface scattering, no hard outlines, no cel-shading lines, no glossy highlights. PNG with transparent background. Avoid: 2D illustration, flat vector art, anime, manga, line art, hand-drawn sketch, watercolor, painting, photographic realism, dark, gritty, horror, blood, weapon, text, watermark, signature, low quality, blurry, oversaturated, neon, sharp shadows, hard outlines, cel-shading lines, glossy plastic, metallic, multiple characters, background scenery, horizontal composition, front view, three-quarter view, profile view, visible face, visible eyes, visible mouth, character looking at camera.
+```
+
+### 2-a. (선택) 레이어드 애니메이션용 — 부위별 분리 생성
+
+framer-motion으로 회전/이동 애니메이션 하려면 캐릭터를 부위별로 따로 생성. 같은 톤·디자인 유지 위해 위 #2 프롬프트를 먼저 만들고, 동일 캐릭터의 부위를 잘라내거나 아래 프롬프트로 부위 단독 생성.
+
+저장: `public/images/angler/torso-back.png` · **1:1** (1024×1024) · 투명
+
+```
+3D rendered Nintendo Switch in-game prop in the Animal Crossing: New Horizons visual style. Square 1:1 sprite, isolated chunky chibi human upper-body shown from BEHIND (back view only, no head, no arms below the elbow), seated posture, soft mint-green short-sleeve shirt with rolled-up beige pants visible below, very simple Animal Crossing villager torso proportions. PBR matte fabric texture, soft ambient occlusion. No head, no hat, no rod, no background — torso section only on transparent background. Avoid: 2D illustration, flat vector, anime, line art, sketch, watercolor, painting, photographic, dark, glossy, metallic, text, watermark, low quality, blurry, sharp shadows, hard outlines, cel-shading lines, front view, profile view, multiple bodies, background scenery.
+```
+
+저장: `public/images/angler/head-back.png` · **1:1** (1024×1024) · 투명
+
+```
+3D rendered Nintendo Switch in-game prop in the Animal Crossing: New Horizons visual style. Square 1:1 sprite, isolated chibi human head shown from BEHIND, wearing a wide-brimmed straw hat in warm cream and tan tones, the dome of the hat visible from a slightly elevated angle, hat brim curving around the head, small tuft of brown hair just below the brim at the back of the neck. NO face visible. PBR matte material, painterly straw weave texture on the hat, soft ambient occlusion under the brim. Head only on transparent background. Avoid: 2D illustration, flat vector, anime, line art, sketch, watercolor, painting, photographic, dark, glossy, metallic, text, watermark, low quality, blurry, sharp shadows, hard outlines, cel-shading lines, front view, profile view, visible face, visible eyes, visible mouth, background scenery.
+```
+
+저장: `public/images/angler/arm-rod.png` · **1:1** (1024×1024) · 투명
+
+```
+3D rendered Nintendo Switch in-game prop in the Animal Crossing: New Horizons visual style. Square 1:1 sprite, a chibi human right arm holding a small short fishing rod, viewed from behind. The arm is bent at the elbow, the rod extends diagonally upward to the upper-right. Soft mint-green short-sleeve cuff visible at the shoulder. The rod is brown wood with a tiny lighter wood tip. PBR matte material. No body, no head, no background — arm + rod only on transparent background. The shoulder/upper-arm side is positioned so it pivots cleanly from the lower-left of the sprite (this is the pivot point for animation in code). Avoid: 2D illustration, flat vector, anime, line art, sketch, watercolor, painting, photographic, dark, glossy, metallic, text, watermark, low quality, blurry, sharp shadows, hard outlines, cel-shading lines, full body, multiple arms, background scenery.
 ```
 
 ---
