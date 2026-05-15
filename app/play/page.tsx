@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { AnimatePresence } from 'framer-motion';
 import { Lake } from 'components/Lake';
 import { Angler } from 'components/Angler';
@@ -12,7 +11,6 @@ import { FightOverlay } from 'components/Fight/FightOverlay';
 import { ResultModal } from 'components/ResultModal';
 import { GoldenRewardModal } from 'components/GoldenRewardModal';
 import { useGameStore } from 'lib/gameState';
-import { ROUTES } from 'lib/routes';
 import { rollGrade, pickSpecies, gradeConfig } from 'lib/fish';
 import {
   incrementCast,
@@ -38,7 +36,6 @@ const TICKET_TIMEOUT_MS = 1500;
 const ADS_EVERY = 5;
 
 export default function PlayPage() {
-  const router = useRouter();
   const player = useGameStore((s) => s.player);
   const totalScore = useGameStore((s) => s.totalScore);
   const addScore = useGameStore((s) => s.addScore);
@@ -58,13 +55,9 @@ export default function PlayPage() {
 
   useEffect(() => {
     setMounted(true);
-    if (!useGameStore.getState().player) {
-      router.replace(ROUTES.ONBOARDING);
-      return;
-    }
     const daily = readDaily(todayString());
     setFishToday(daily.fishCaught);
-  }, [router]);
+  }, []);
 
   useEffect(() => {
     const cleanup = onMessage((msg: FishParentMessage) => {
@@ -156,7 +149,7 @@ export default function PlayPage() {
     : phase === 'fight' || phase === 'result' || phase === 'reward' || phase === 'ad' ? 'sunken'
     : 'hidden';
 
-  if (!mounted || !player) return null;
+  if (!mounted) return null;
 
   // suppress unused-locals if tsconfig is strict
   void totalScore;

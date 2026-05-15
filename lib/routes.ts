@@ -1,6 +1,5 @@
 export const ROUTES = {
   HOME: '/',
-  ONBOARDING: '/onboarding',
   PLAY: '/play',
   LEADERBOARD: '/leaderboard',
 } as const;
