@@ -1,23 +1,20 @@
 import styles from './Lake.module.scss';
 
-// Big foreground lake scene for the play screen. Pure CSS, animated water.
-// Children (angler, bobber, splash, fish) overlay on top.
+// Play-screen scene. Static Gemini-rendered background image + a handful of
+// subtle CSS/framer overlays that add motion (shimmer, sun glow, lily-pad
+// ripples) without contradicting the painted scene.
 export function Lake({ children }: { children?: React.ReactNode }) {
   return (
     <div className={styles.lake}>
-      <div className={styles.lake__sky} />
-      <div className={styles.lake__sun} />
-      <div className={styles.lake__hills} />
-      <div className={styles.lake__water}>
-        <div className={styles.lake__waterBob}>
-          <div className={styles.lake__wave1} />
-          <div className={styles.lake__wave2} />
-          <div className={styles.lake__shimmer} />
-        </div>
-      </div>
-      <div className={styles.lake__beach} />
-      <div className={styles.lake__dock} />
-      <div className={styles.lake__ground} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/images/01-play-bg.png" alt="" className={styles.lake__bg} draggable={false} />
+
+      {/* Animated overlays */}
+      <div className={styles.lake__sunGlow} aria-hidden />
+      <div className={styles.lake__shimmer} aria-hidden />
+      <div className={styles.lake__ambientRipple} aria-hidden />
+      <div className={styles.lake__ambientRipple2} aria-hidden />
+
       {children}
     </div>
   );

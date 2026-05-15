@@ -21,6 +21,7 @@ IMG_DIR = ROOT / "public" / "images"
 # Files that intentionally keep their full background.
 SKIP = {
     "01-title-bg.png",
+    "01-play-bg.png",
 }
 
 

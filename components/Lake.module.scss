@@ -1,157 +1,100 @@
-// Play-screen scene. Large foreground lake takes the bulk of the viewport so
-// the bobber/fish action reads from the back-view angler at the bottom. Pure
-// CSS, animated.
+// Play-screen scene built on top of the painted Gemini bg. CSS overlays
+// provide subtle motion that matches the AC-cozy tone without fighting the
+// static base image.
 .lake {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: linear-gradient(180deg, #FBD8B5 0%, #FFC9A5 25%, #FFE9D2 45%, #BFE4E0 65%, #7CC2BC 80%, #4A8DA0 100%);
+  background: #FBD8B5;
 
-  &__sky {
+  &__bg {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 22vh;
-    background:
-      radial-gradient(ellipse at 80% 40%, rgba(255, 220, 200, 0.45), transparent 60%),
-      radial-gradient(ellipse at 30% 60%, rgba(255, 200, 180, 0.35), transparent 65%),
-      linear-gradient(180deg, #FBD8B5 0%, #FFD5B0 50%, #FFE5C5 100%);
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+    z-index: 0;
   }
 
-  &__sun {
+  // Soft warm halo over the painted sun — gives a gentle pulse to the
+  // upper-right corner. Position tuned for the prompt's "sun in upper right".
+  &__sunGlow {
     position: absolute;
-    top: 6vh;
-    left: 70%;
-    width: 8rem;
-    height: 8rem;
+    top: 4vh;
+    right: -4rem;
+    width: 18rem;
+    height: 18rem;
     border-radius: 50%;
-    background: radial-gradient(circle at 50% 50%, #FFF6D4 0%, #FFCC88 70%, rgba(255, 204, 136, 0) 100%);
-    box-shadow: 0 0 6rem rgba(255, 220, 150, 0.6);
+    background: radial-gradient(circle at center, rgba(255, 240, 200, 0.45), rgba(255, 220, 160, 0) 70%);
+    pointer-events: none;
+    z-index: 1;
+    animation: sunPulse 5s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
   }
 
-  &__hills {
-    position: absolute;
-    top: 20vh;
-    left: 0;
-    right: 0;
-    height: 7vh;
-    background: linear-gradient(180deg, #A8C99C, #7FA672);
-    clip-path: polygon(0% 100%, 0% 55%, 14% 25%, 26% 60%, 42% 22%, 58% 55%, 72% 32%, 86% 50%, 100% 38%, 100% 100%);
-    opacity: 0.85;
-  }
-
-  // Big foreground lake (47vh tall)
-  &__water {
+  // Lake surface shimmer — drifting soft highlights that cover only the
+  // water band (roughly 26vh ~ 73vh from top per the prompt's vertical split).
+  &__shimmer {
     position: absolute;
     top: 26vh;
     left: 0;
     right: 0;
     height: 47vh;
-    background: linear-gradient(180deg, #7BC8CC 0%, #4F9DB8 45%, #2F6A88 100%);
-    border-radius: 0 0 30% 30% / 0 0 4% 4%;
-    overflow: hidden;
-  }
-
-  // Animated wave bands. Three layers at different speeds + opacities for depth.
-  &__wave1 {
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      90deg,
-      transparent 0,
-      transparent 5rem,
-      rgba(255, 255, 255, 0.16) 5rem,
-      rgba(255, 255, 255, 0.16) 7rem
-    );
-    animation: drift1 7s linear infinite;
-  }
-  &__wave2 {
-    position: absolute;
-    inset: 0;
-    background: repeating-linear-gradient(
-      90deg,
-      transparent 0,
-      transparent 8rem,
-      rgba(255, 255, 255, 0.08) 8rem,
-      rgba(255, 255, 255, 0.08) 10rem
-    );
-    animation: drift2 11s linear infinite;
-    transform: translateY(2vh);
-  }
-  &__shimmer {
-    position: absolute;
-    inset: 0;
     background:
-      radial-gradient(ellipse 8rem 1.5rem at 30% 30%, rgba(255, 255, 255, 0.45), transparent 70%),
-      radial-gradient(ellipse 6rem 1.2rem at 70% 50%, rgba(255, 255, 255, 0.35), transparent 70%),
-      radial-gradient(ellipse 10rem 1.8rem at 45% 75%, rgba(255, 255, 255, 0.3), transparent 70%);
-    animation: shimmerPulse 4s ease-in-out infinite alternate;
+      radial-gradient(ellipse 18rem 1.2rem at 25% 30%, rgba(255, 255, 255, 0.35), transparent 70%),
+      radial-gradient(ellipse 14rem 1rem  at 70% 55%, rgba(255, 255, 255, 0.28), transparent 70%),
+      radial-gradient(ellipse 22rem 1.4rem at 45% 80%, rgba(255, 255, 255, 0.22), transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+    animation: shimmerDrift 7s linear infinite, shimmerPulse 3.5s ease-in-out infinite alternate;
     mix-blend-mode: screen;
   }
 
-  // Subtle vertical bob applied to whole water region for "live" feel
-  &__waterBob {
+  // Ambient ripples that appear periodically somewhere on the lake to imply
+  // wind/fish. Two staggered rings.
+  &__ambientRipple,
+  &__ambientRipple2 {
     position: absolute;
-    inset: 0;
-    animation: waterBob 3.4s ease-in-out infinite alternate;
+    width: 8rem;
+    height: 2.4rem;
+    border: 0.2rem solid rgba(255, 255, 255, 0.5);
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 2;
   }
-
-  // Sand strip between water and ground
-  &__beach {
-    position: absolute;
-    top: 71vh;
-    left: 0;
-    right: 0;
-    height: 4vh;
-    background: linear-gradient(180deg, #E8CD9E 0%, #C9A66B 100%);
+  &__ambientRipple {
+    top: 38vh;
+    left: 18%;
+    animation: ambientRipple 9s ease-out infinite;
   }
-
-  // Wooden dock perspective slice
-  &__dock {
-    position: absolute;
-    top: 73vh;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 60vw;
-    height: 12vh;
-    background:
-      repeating-linear-gradient(
-        90deg,
-        #8B5A2B 0,
-        #8B5A2B 1.6rem,
-        #6B4423 1.6rem,
-        #6B4423 1.8rem
-      );
-    clip-path: polygon(20% 0%, 80% 0%, 100% 100%, 0% 100%);
-    box-shadow: 0 -0.4rem 1.2rem rgba(0, 0, 0, 0.15);
-  }
-
-  &__ground {
-    position: absolute;
-    top: 75vh;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(180deg, #9DBE8A 0%, #6FA063 100%);
-    z-index: -1;
+  &__ambientRipple2 {
+    top: 55vh;
+    left: 62%;
+    animation: ambientRipple 11s ease-out 3.5s infinite;
   }
 }
 
-@keyframes drift1 {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-12rem); }
+@keyframes sunPulse {
+  from { opacity: 0.6; transform: scale(1); }
+  to   { opacity: 1;   transform: scale(1.08); }
 }
-@keyframes drift2 {
-  from { transform: translateX(0); }
-  to   { transform: translateX(20rem); }
+
+@keyframes shimmerDrift {
+  from { background-position: 0 0, 0 0, 0 0; }
+  to   { background-position: 6rem 0, -5rem 0, 4rem 0; }
 }
+
 @keyframes shimmerPulse {
-  from { opacity: 0.5; }
+  from { opacity: 0.55; }
   to   { opacity: 1; }
 }
-@keyframes waterBob {
-  from { transform: translateY(0); }
-  to   { transform: translateY(0.4rem); }
+
+@keyframes ambientRipple {
+  0%   { opacity: 0;   transform: scale(0.3); }
+  10%  { opacity: 0.8; transform: scale(0.4); }
+  60%  { opacity: 0.3; transform: scale(1.6); }
+  100% { opacity: 0;   transform: scale(2.2); }
 }
