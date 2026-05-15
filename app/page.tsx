@@ -16,9 +16,6 @@ export default function TitlePage() {
           <Link href={ROUTES.PLAY} className={styles.title__cta}>
             시작하기
           </Link>
-          <Link href={ROUTES.LEADERBOARD} className={styles.title__secondary}>
-            명예의 전당
-          </Link>
         </div>
       </div>
     </main>

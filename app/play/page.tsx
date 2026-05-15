@@ -5,8 +5,8 @@ import { AnimatePresence } from 'framer-motion';
 import { Lake } from 'components/Lake';
 import { Angler } from 'components/Angler';
 import { Bobber } from 'components/Bobber';
+import { Splash } from 'components/Splash';
 import { CastButton } from 'components/CastButton';
-import { DailyHud } from 'components/DailyHud';
 import { FightOverlay } from 'components/Fight/FightOverlay';
 import { ResultModal } from 'components/ResultModal';
 import { GoldenRewardModal } from 'components/GoldenRewardModal';
@@ -51,15 +51,13 @@ export default function PlayPage() {
   const [grade, setGrade] = useState<FishGrade>('trash');
   const [species, setSpecies] = useState<FishSpecies | undefined>(undefined);
   const [lastOutcome, setLastOutcome] = useState<'caught' | 'escaped' | 'broken'>('caught');
-  const [fishToday, setFishToday] = useState(0);
+  const [showSplash, setShowSplash] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const pendingTicketTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    const daily = readDaily(todayString());
-    setFishToday(daily.fishCaught);
     // Tell parent we're ready to receive FISH:SET_PLAYER injection.
     sendReady();
   }, []);
@@ -92,6 +90,8 @@ export default function PlayPage() {
     vibrate('bite');
     setTimeout(() => {
       setPhase('waiting');
+      setShowSplash(true);
+      setTimeout(() => setShowSplash(false), 700);
       const biteAfter = 1000 + Math.random() * 9000; // 1~10s bite window
       setTimeout(() => {
         setPhase('bite');
@@ -116,8 +116,7 @@ export default function PlayPage() {
     if (result === 'caught') {
       const cfg = gradeConfig(grade);
       addScore(cfg.score);
-      const fishDaily = incrementFish(todayString());
-      setFishToday(fishDaily.fishCaught);
+      incrementFish(todayString());
 
       sendScoreUpdate(useGameStore.getState().totalScore);
 
@@ -152,9 +151,10 @@ export default function PlayPage() {
     }
   };
 
-  const castsTillAd = Math.max(0, ADS_EVERY - castsSinceAd);
-  const showBobber: 'hidden' | 'floating' | 'bite' | 'sunken' =
-    phase === 'idle' || phase === 'casting' ? 'hidden'
+  void castsSinceAd; // counter exists for ad gating but no HUD displays it
+  const showBobber: 'hidden' | 'arc' | 'floating' | 'bite' | 'sunken' =
+    phase === 'idle' ? 'hidden'
+    : phase === 'casting' ? 'arc'
     : phase === 'waiting' ? 'floating'
     : phase === 'bite' ? 'bite'
     : phase === 'fight' || phase === 'result' || phase === 'reward' || phase === 'ad' ? 'sunken'
@@ -171,11 +171,8 @@ export default function PlayPage() {
       <Lake>
         <Angler castedRod={phase !== 'idle'} />
         <Bobber state={showBobber} />
+        <Splash visible={showSplash} />
       </Lake>
-
-      <div className={styles.play__hudWrap}>
-        <DailyHud fishCaught={fishToday} castsTillAd={castsTillAd} />
-      </div>
 
       <div className={styles.play__castWrap}>
         <CastButton

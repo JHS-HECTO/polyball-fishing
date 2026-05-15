@@ -1,4 +1,4 @@
-// Bobber sits inside the water region (top ~22vh + ~25vh down = ~47vh from top).
+// Bobber rest position inside the lake. Sized for the rendered sprite.
 .bobber {
   position: absolute;
   left: calc(50% + 0.5rem);
@@ -7,6 +7,8 @@
   height: 4rem;
   transform: translateX(-50%);
   filter: drop-shadow(0 0.4rem 0.6rem rgba(0, 0, 0, 0.25));
+  pointer-events: none;
+  z-index: 3;
 
   &__img {
     width: 100%;
