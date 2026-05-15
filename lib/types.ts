@@ -9,12 +9,14 @@ export type FishSpecies = {
 
 export type FishGradeConfig = {
   grade: FishGrade;
-  probability: number;       // 0..1
+  probability: number;        // 0..1
   score: number;
-  rounds: number;
-  tensionUpPerSec: number;   // % per second when wrong input
-  tensionDownPerSec: number; // % per second when correct input
-  escapeChanceHighTension: number; // 0..1, rolled at round end if tension >= 70%
+  // Continuous fight (no rounds). Player wins when catchProgress reaches 100,
+  // fish wins when tension reaches 100.
+  staminaUpPerSec: number;    // catch progress % per second when input is correct
+  staminaDownPerSec: number;  // catch progress drains slowly when input is wrong/none
+  tensionUpPerSec: number;    // tension % per second when wrong/no input
+  tensionDownPerSec: number;  // tension % per second when input is correct
   species: FishSpecies[];
 };
 

@@ -88,7 +88,7 @@ export default function PlayPage() {
     vibrate('bite');
     setTimeout(() => {
       setPhase('waiting');
-      const biteAfter = 1000 + Math.random() * 1000;
+      const biteAfter = 1000 + Math.random() * 9000; // 1~10s bite window
       setTimeout(() => {
         setPhase('bite');
         vibrate('bite');

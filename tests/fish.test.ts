@@ -52,6 +52,7 @@ describe('gradeConfig', () => {
   it('returns config for golden', () => {
     const cfg = gradeConfig('golden');
     expect(cfg.score).toBe(2000);
-    expect(cfg.rounds).toBe(5);
+    expect(cfg.staminaUpPerSec).toBeGreaterThan(0);
+    expect(cfg.tensionUpPerSec).toBeGreaterThan(cfg.tensionDownPerSec);
   });
 });
