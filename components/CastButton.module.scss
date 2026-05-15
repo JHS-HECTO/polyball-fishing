@@ -1,0 +1,14 @@
+.cast {
+  background: linear-gradient(180deg, var(--colors-deep1), var(--colors-deep2));
+  color: white;
+  font-size: 2.2rem;
+  font-weight: 800;
+  padding: var(--space-4) var(--space-6);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-lg);
+  letter-spacing: 0.1em;
+  transition: transform 120ms ease;
+
+  &:active { transform: scale(0.96); }
+  &--disabled { opacity: 0.45; pointer-events: none; }
+}
