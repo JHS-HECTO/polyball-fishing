@@ -1,0 +1,52 @@
+.reward {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 217, 61, 0.35), rgba(29, 53, 87, 0.85));
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &__card {
+    background: var(--colors-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    width: min(34rem, 100%);
+    text-align: center;
+    border-top: 0.8rem solid var(--colors-gold);
+    box-shadow: 0 0 6rem rgba(255, 217, 61, 0.5);
+  }
+
+  &__ticket {
+    font-size: 8rem;
+    line-height: 1;
+    perspective: 60rem;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--colors-deep2);
+  }
+
+  &__subtitle {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--colors-text-soft);
+  }
+
+  &__cta {
+    margin-top: var(--space-3);
+    background: var(--colors-gold);
+    color: var(--colors-deep2);
+    font-size: 1.6rem;
+    font-weight: 800;
+    padding: var(--space-3) var(--space-5);
+    border-radius: var(--radius-pill);
+  }
+}
