@@ -1,0 +1,46 @@
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3);
+  background: var(--colors-surface);
+  border-radius: var(--radius-md);
+  list-style: none;
+
+  &--me {
+    background: var(--colors-gold);
+    color: var(--colors-deep2);
+  }
+
+  &__rank {
+    width: 3rem;
+    font-size: 1.6rem;
+    font-weight: 800;
+    text-align: center;
+    color: var(--colors-deep1);
+  }
+
+  &__nick {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    font-size: 1.5rem;
+    font-weight: 700;
+  }
+
+  &__team {
+    align-self: flex-start;
+    padding: 0.1rem 0.5rem;
+    border-radius: var(--radius-pill);
+    color: white;
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  &__score {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--colors-deep2);
+  }
+}
