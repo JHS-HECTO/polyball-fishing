@@ -28,7 +28,13 @@
     "types": [
       "vitest/globals",
       "@testing-library/jest-dom"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "lib/*": ["lib/*"],
+      "components/*": ["components/*"],
+      "data/*": ["data/*"]
+    }
   },
   "include": [
     "next-env.d.ts",
