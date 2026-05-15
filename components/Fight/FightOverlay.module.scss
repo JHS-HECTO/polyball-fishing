@@ -1,0 +1,48 @@
+.fight {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(168, 218, 220, 0.95), rgba(69, 123, 157, 0.95));
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--space-5);
+
+  &__top {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-4);
+    padding-top: var(--space-6);
+  }
+
+  &__round {
+    font-size: 1.4rem;
+    font-weight: 800;
+    letter-spacing: 0.2em;
+    color: white;
+    text-shadow: 0 0.2rem 0.4rem rgba(0,0,0,0.2);
+  }
+
+  &__middle {
+    width: 100%;
+    max-width: 40rem;
+    align-self: center;
+  }
+
+  &__bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    padding-bottom: var(--space-6);
+  }
+
+  &__hint {
+    font-size: 1.4rem;
+    color: white;
+    margin: 0;
+    text-align: center;
+    opacity: 0.85;
+  }
+}
