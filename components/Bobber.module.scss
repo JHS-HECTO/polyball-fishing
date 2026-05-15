@@ -1,13 +1,17 @@
 // Bobber sits inside the water region (top ~22vh + ~25vh down = ~47vh from top).
-// Aligned with the rod tip's horizontal arc — slightly right of center.
 .bobber {
   position: absolute;
   left: calc(50% + 0.5rem);
   top: 47vh;
-  width: 2.2rem;
-  height: 2.2rem;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #FFFFFF, #E63946);
+  width: 4rem;
+  height: 4rem;
   transform: translateX(-50%);
-  box-shadow: 0 0.3rem 0.6rem rgba(0, 0, 0, 0.2);
+  filter: drop-shadow(0 0.4rem 0.6rem rgba(0, 0, 0, 0.25));
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+  }
 }

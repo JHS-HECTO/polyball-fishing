@@ -62,9 +62,20 @@ export function ResultModal({ outcome, grade, species, onClose }: Props) {
         animate={{ y: 0, scale: 1 }}
         transition={{ type: 'spring', stiffness: 280, damping: 22 }}
       >
-        <div className={styles.result__emoji}>
-          {outcome === 'caught' ? (grade === 'golden' ? '🪙' : '🎣') : '💧'}
-        </div>
+        {outcome === 'caught' && species ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={species.image}
+            alt={species.name}
+            className={styles.result__fishImg}
+            data-grade={grade}
+            draggable={false}
+          />
+        ) : (
+          <div className={styles.result__emoji}>
+            {outcome === 'caught' ? '🎣' : '💧'}
+          </div>
+        )}
         <h3 className={styles.result__title}>{msg}</h3>
         {outcome === 'caught' && species && (
           <p className={styles.result__species}>{species.name}</p>

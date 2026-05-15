@@ -1,16 +1,12 @@
 import styles from './Lake.module.scss';
 
+// Background scene. The 01-title-bg.png provides the full reservoir scenery
+// (sky / hills / water / shore). Children (angler, bobber, fish) overlay on top.
 export function Lake({ children }: { children?: React.ReactNode }) {
   return (
     <div className={styles.lake}>
-      <div className={styles.lake__sky} />
-      <div className={styles.lake__hills} />
-      <div className={styles.lake__water}>
-        <div className={styles.lake__wave} />
-        <div className={styles.lake__wave} style={{ animationDelay: '0.6s' }} />
-      </div>
-      <div className={styles.lake__beach} />
-      <div className={styles.lake__ground} />
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img src="/images/01-title-bg.png" alt="" className={styles.lake__bg} draggable={false} />
       {children}
     </div>
   );

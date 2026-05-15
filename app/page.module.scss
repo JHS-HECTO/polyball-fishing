@@ -1,18 +1,19 @@
 .title {
   position: relative;
   min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  background: linear-gradient(180deg, #FFE5D9 0%, #A8DADC 100%);
 
-  &__sky {
-    flex: 1;
-    background: linear-gradient(180deg, #FFE5D9 0%, #A8DADC 100%);
-  }
-
-  &__water {
-    height: 30vh;
-    background: linear-gradient(180deg, #6FBFC4 0%, #457B9D 100%);
+  &__bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
   }
 
   &__content {
@@ -21,24 +22,29 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: var(--space-4);
-    padding: var(--space-5);
+    justify-content: flex-end;
+    padding: var(--space-5) var(--space-5) 12vh;
     text-align: center;
+    gap: var(--space-3);
   }
 
   &__heading {
     font-size: 4.8rem;
     font-weight: 800;
     margin: 0;
-    color: var(--colors-deep2);
+    color: white;
     letter-spacing: -0.05em;
+    text-shadow:
+      0 0.4rem 1.2rem rgba(0, 0, 0, 0.4),
+      0 0 2rem rgba(0, 0, 0, 0.15);
   }
 
   &__subtitle {
     font-size: 1.6rem;
-    color: var(--colors-text-soft);
+    color: rgba(255, 255, 255, 0.95);
     margin: 0;
+    text-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.4);
+    font-weight: 600;
   }
 
   &__actions {

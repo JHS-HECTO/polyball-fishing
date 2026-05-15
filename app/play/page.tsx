@@ -193,7 +193,9 @@ export default function PlayPage() {
       </div>
 
       {phase === 'fight' && (
-        <FightOverlay grade={grade} onComplete={onFightComplete} />
+        species !== undefined
+          ? <FightOverlay grade={grade} species={species} onComplete={onFightComplete} />
+          : <FightOverlay grade={grade} onComplete={onFightComplete} />
       )}
 
       <AnimatePresence>

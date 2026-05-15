@@ -9,9 +9,9 @@
       "tensionUpPerSec": 6,
       "tensionDownPerSec": 14,
       "species": [
-        { "id": "trash-1", "name": "붕어", "grade": "trash", "image": "/images/fish/trash-bunge.png" },
-        { "id": "trash-2", "name": "피라미", "grade": "trash", "image": "/images/fish/trash-pirami.png" },
-        { "id": "trash-3", "name": "송사리", "grade": "trash", "image": "/images/fish/trash-songsari.png" }
+        { "id": "trash-1", "name": "붕어", "grade": "trash", "image": "/images/03-trash-bunge.png" },
+        { "id": "trash-2", "name": "피라미", "grade": "trash", "image": "/images/04-trash-pirami.png" },
+        { "id": "trash-3", "name": "송사리", "grade": "trash", "image": "/images/05-trash-songsari.png" }
       ]
     },
     {
@@ -23,9 +23,9 @@
       "tensionUpPerSec": 13,
       "tensionDownPerSec": 13,
       "species": [
-        { "id": "normal-1", "name": "잉어", "grade": "normal", "image": "/images/fish/normal-ingeo.png" },
-        { "id": "normal-2", "name": "쏘가리", "grade": "normal", "image": "/images/fish/normal-ssogari.png" },
-        { "id": "normal-3", "name": "빙어", "grade": "normal", "image": "/images/fish/normal-bingeo.png" }
+        { "id": "normal-1", "name": "잉어", "grade": "normal", "image": "/images/06-normal-ingeo.png" },
+        { "id": "normal-2", "name": "쏘가리", "grade": "normal", "image": "/images/07-normal-ssogari.png" },
+        { "id": "normal-3", "name": "빙어", "grade": "normal", "image": "/images/08-normal-bingeo.png" }
       ]
     },
     {
@@ -37,9 +37,9 @@
       "tensionUpPerSec": 22,
       "tensionDownPerSec": 12,
       "species": [
-        { "id": "rare-1", "name": "메기", "grade": "rare", "image": "/images/fish/rare-megi.png" },
-        { "id": "rare-2", "name": "향어", "grade": "rare", "image": "/images/fish/rare-hyangeo.png" },
-        { "id": "rare-3", "name": "가물치", "grade": "rare", "image": "/images/fish/rare-gamulchi.png" }
+        { "id": "rare-1", "name": "메기", "grade": "rare", "image": "/images/09-rare-megi.png" },
+        { "id": "rare-2", "name": "향어", "grade": "rare", "image": "/images/10-rare-hyangeo.png" },
+        { "id": "rare-3", "name": "가물치", "grade": "rare", "image": "/images/11-rare-gamulchi.png" }
       ]
     },
     {
@@ -51,8 +51,8 @@
       "tensionUpPerSec": 30,
       "tensionDownPerSec": 11,
       "species": [
-        { "id": "big-1", "name": "대형 잉어", "grade": "big", "image": "/images/fish/big-ingeo.png" },
-        { "id": "big-2", "name": "대형 배스", "grade": "big", "image": "/images/fish/big-bass.png" }
+        { "id": "big-1", "name": "대형 잉어", "grade": "big", "image": "/images/12-big-ingeo.png" },
+        { "id": "big-2", "name": "대형 배스", "grade": "big", "image": "/images/13-big-bass.png" }
       ]
     },
     {
@@ -64,7 +64,7 @@
       "tensionUpPerSec": 45,
       "tensionDownPerSec": 9,
       "species": [
-        { "id": "golden-1", "name": "황금 잉어", "grade": "golden", "image": "/images/fish/golden.png" }
+        { "id": "golden-1", "name": "황금 잉어", "grade": "golden", "image": "/images/14-golden.png" }
       ]
     }
   ]

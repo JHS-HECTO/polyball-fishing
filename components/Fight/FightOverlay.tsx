@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useRef, useState } from 'react';
-import type { FishGrade } from 'lib/types';
+import type { FishGrade, FishSpecies } from 'lib/types';
 import { gradeConfig } from 'lib/fish';
 import { updateTension, type InputDirection } from 'lib/tension';
 import { vibrate } from 'lib/haptics';
@@ -14,6 +14,7 @@ type FightResult = 'caught' | 'escaped' | 'broken';
 
 type Props = {
   grade: FishGrade;
+  species?: FishSpecies;
   onComplete: (result: FightResult) => void;
 };
 
@@ -53,7 +54,7 @@ function clamp(n: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, n));
 }
 
-export function FightOverlay({ grade, onComplete }: Props) {
+export function FightOverlay({ grade, species, onComplete }: Props) {
   const cfg = gradeConfig(grade);
   const [tension, setTension] = useState(0);
   const [catchProgress, setCatchProgress] = useState(0);
@@ -217,7 +218,10 @@ export function FightOverlay({ grade, onComplete }: Props) {
             style={{ width: `${catchProgress}%` }}
           />
         </div>
-        <FishSilhouette grade={grade} direction={fishDir} flashOnHit={flashHit} />
+        {species !== undefined
+          ? <FishSilhouette grade={grade} species={species} direction={fishDir} flashOnHit={flashHit} />
+          : <FishSilhouette grade={grade} direction={fishDir} flashOnHit={flashHit} />
+        }
       </div>
 
       <div className={styles.fight__middle}>

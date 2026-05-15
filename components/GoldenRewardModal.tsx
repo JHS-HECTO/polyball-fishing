@@ -30,7 +30,8 @@ export function GoldenRewardModal({ count, onClose }: Props) {
           animate={{ rotateY: [0, 360] }}
           transition={{ duration: 1.6, repeat: Infinity, ease: 'linear' }}
         >
-          🎫
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/images/15-ticket.png" alt="응모권" className={styles.reward__ticketImg} draggable={false} />
         </MotionDiv>
         <h3 className={styles.reward__title}>응모권 {count}장 획득!</h3>
         <p className={styles.reward__subtitle}>황금물고기가 응모권을 물고 있었어요</p>

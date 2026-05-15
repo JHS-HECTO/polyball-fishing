@@ -1,79 +1,16 @@
-// Portrait layout: sky top → water middle (largest) → beach/sand bottom.
-// Angler sits below the beach (rendered by Angler component) looking up into water.
 .lake {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
+  background: linear-gradient(180deg, #FFE5D9 0%, #A8DADC 100%);
 
-  &__sky {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 22vh;
-    background: linear-gradient(180deg, #FFE5D9 0%, #FFD9A8 45%, #A8DADC 100%);
-  }
-
-  &__hills {
-    position: absolute;
-    top: 18vh;
-    left: 0;
-    right: 0;
-    height: 6rem;
-    background: linear-gradient(180deg, #B8D4B0, #8FAE82);
-    clip-path: polygon(0% 100%, 0% 50%, 18% 25%, 32% 60%, 48% 20%, 64% 55%, 78% 30%, 92% 50%, 100% 35%, 100% 100%);
-    opacity: 0.85;
-  }
-
-  &__water {
-    position: absolute;
-    top: 22vh;
-    left: 0;
-    right: 0;
-    height: 43vh;
-    background:
-      radial-gradient(ellipse at 50% 30%, rgba(255,255,255,0.18), transparent 60%),
-      linear-gradient(180deg, #7BC8CC 0%, #4F9DB8 50%, #2F6A88 100%);
-    overflow: hidden;
-
-    // Soft elliptical horizon edge so the lake reads as a pond, not a flat band
-    border-radius: 0 0 30% 30% / 0 0 8% 8%;
-  }
-
-  &__wave {
+  &__bg {
     position: absolute;
     inset: 0;
-    background: repeating-linear-gradient(
-      90deg,
-      transparent 0,
-      transparent 6rem,
-      rgba(255,255,255,0.12) 6rem,
-      rgba(255,255,255,0.12) 8rem
-    );
-    animation: drift 5s linear infinite;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
   }
-
-  &__beach {
-    position: absolute;
-    top: 63vh;
-    left: 0;
-    right: 0;
-    height: 6vh;
-    background: linear-gradient(180deg, #E6CB9C 0%, #C9A66B 100%);
-  }
-
-  &__ground {
-    position: absolute;
-    top: 69vh;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(180deg, #9DBE8A 0%, #6FA063 100%);
-  }
-}
-
-@keyframes drift {
-  from { transform: translateX(0); }
-  to   { transform: translateX(-8rem); }
 }

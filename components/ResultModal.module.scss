@@ -29,6 +29,22 @@
     line-height: 1;
   }
 
+  &__fishImg {
+    width: 14rem;
+    height: 14rem;
+    object-fit: contain;
+    filter: drop-shadow(0 0.8rem 1.6rem rgba(0, 0, 0, 0.18));
+
+    &[data-grade='golden'] {
+      width: 16rem;
+      height: 16rem;
+      filter:
+        drop-shadow(0 0 2.4rem rgba(255, 217, 61, 0.7))
+        drop-shadow(0 0.8rem 1.6rem rgba(0, 0, 0, 0.18));
+      animation: goldenSpin 4s linear infinite;
+    }
+  }
+
   &__title {
     margin: 0;
     font-size: 2.2rem;
@@ -57,4 +73,10 @@
     padding: var(--space-2) var(--space-5);
     border-radius: var(--radius-pill);
   }
+}
+
+@keyframes goldenSpin {
+  from { transform: rotate(-3deg); }
+  50%  { transform: rotate(3deg); }
+  to   { transform: rotate(-3deg); }
 }
