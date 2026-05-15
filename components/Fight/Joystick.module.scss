@@ -1,0 +1,25 @@
+.joystick {
+  &__base {
+    position: relative;
+    width: 16rem;
+    height: 16rem;
+    border-radius: 50%;
+    background: rgba(69, 123, 157, 0.12);
+    border: 0.3rem dashed rgba(69, 123, 157, 0.4);
+    touch-action: none;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__knob {
+    width: 6rem;
+    height: 6rem;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #FFFFFF, #A8DADC);
+    box-shadow: var(--shadow-md);
+    transition: transform 60ms ease-out;
+    pointer-events: none;
+  }
+}
