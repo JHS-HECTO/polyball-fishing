@@ -1,0 +1,50 @@
+.angler {
+  position: absolute;
+  bottom: 22vh;
+  left: 50%;
+  transform: translateX(-50%);
+
+  &__body {
+    position: relative;
+    width: 8rem;
+    height: 10rem;
+  }
+
+  &__head {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4rem;
+    height: 4rem;
+    background: #F5C9A1;
+    border-radius: 50%;
+    border: 0.3rem solid var(--colors-deep2);
+  }
+
+  &__torso {
+    position: absolute;
+    top: 3.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 6rem;
+    height: 7rem;
+    background: var(--colors-deep1);
+    border-radius: 2rem 2rem 1rem 1rem;
+    border: 0.3rem solid var(--colors-deep2);
+  }
+
+  &__rod {
+    position: absolute;
+    top: 0;
+    right: -3rem;
+    width: 0.4rem;
+    height: 10rem;
+    background: #6B4423;
+    transform-origin: bottom center;
+    transition: transform 280ms ease-out;
+
+    &[data-cast='no']  { transform: rotate(-25deg); }
+    &[data-cast='yes'] { transform: rotate(35deg); }
+  }
+}
