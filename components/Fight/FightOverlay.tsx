@@ -132,7 +132,7 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       const jx = joystick.current.x;
       const dir = fishDirRef.current;
       let cls: InputDirection = 'none';
-      if (Math.abs(jx) > 0.25) {
+      if (Math.abs(jx) > 0.12) {
         cls = Math.sign(jx) !== dir ? 'correct' : 'wrong';
       }
       if (cls !== lastInputClassRef.current) {
