@@ -5,8 +5,8 @@
       "probability": 0.50,
       "score": 10,
       "rounds": 1,
-      "tensionUpPerSec": 5,
-      "tensionDownPerSec": 12,
+      "tensionUpPerSec": 8,
+      "tensionDownPerSec": 14,
       "escapeChanceHighTension": 0,
       "species": [
         { "id": "trash-1", "name": "붕어", "grade": "trash", "image": "/images/fish/trash-bunge.png" },
@@ -19,8 +19,8 @@
       "probability": 0.30,
       "score": 30,
       "rounds": 2,
-      "tensionUpPerSec": 10,
-      "tensionDownPerSec": 12,
+      "tensionUpPerSec": 15,
+      "tensionDownPerSec": 13,
       "escapeChanceHighTension": 0.05,
       "species": [
         { "id": "normal-1", "name": "잉어", "grade": "normal", "image": "/images/fish/normal-ingeo.png" },
@@ -33,7 +33,7 @@
       "probability": 0.15,
       "score": 100,
       "rounds": 3,
-      "tensionUpPerSec": 18,
+      "tensionUpPerSec": 25,
       "tensionDownPerSec": 12,
       "escapeChanceHighTension": 0.15,
       "species": [
@@ -47,8 +47,8 @@
       "probability": 0.045,
       "score": 500,
       "rounds": 4,
-      "tensionUpPerSec": 25,
-      "tensionDownPerSec": 12,
+      "tensionUpPerSec": 35,
+      "tensionDownPerSec": 11,
       "escapeChanceHighTension": 0.25,
       "species": [
         { "id": "big-1", "name": "대형 잉어", "grade": "big", "image": "/images/fish/big-ingeo.png" },
@@ -60,8 +60,8 @@
       "probability": 0.005,
       "score": 2000,
       "rounds": 5,
-      "tensionUpPerSec": 30,
-      "tensionDownPerSec": 12,
+      "tensionUpPerSec": 50,
+      "tensionDownPerSec": 9,
       "escapeChanceHighTension": 0.35,
       "species": [
         { "id": "golden-1", "name": "황금 잉어", "grade": "golden", "image": "/images/fish/golden.png" }

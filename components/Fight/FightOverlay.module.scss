@@ -7,6 +7,49 @@
   flex-direction: column;
   justify-content: space-between;
   padding: var(--space-5);
+  overflow: hidden;
+  transition: background 200ms ease;
+
+  // Tension-driven background tint (red wash creeps in as tension climbs)
+  &[data-tension-level='warn'] {
+    background: linear-gradient(180deg, rgba(255, 200, 180, 0.95), rgba(190, 110, 110, 0.95));
+  }
+  &[data-tension-level='danger'] {
+    background: linear-gradient(180deg, rgba(255, 160, 130, 0.95), rgba(195, 70, 70, 0.95));
+  }
+  &[data-tension-level='critical'] {
+    background: linear-gradient(180deg, rgba(255, 100, 100, 0.95), rgba(140, 30, 30, 0.95));
+    animation: criticalPulse 320ms infinite alternate;
+  }
+
+  // Tug surge: brief flash + small camera kick
+  &--tug {
+    animation: tugKick 120ms ease-out 4;
+  }
+
+  // High tension camera shake (≥80%)
+  &--shake {
+    animation: cameraShake 110ms infinite alternate;
+  }
+
+  // Red radial vignette overlay (shown once tension is in 'warn' or higher).
+  // Opacity scales via the parent's data-tension-level state.
+  &__vignette {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background: radial-gradient(
+      ellipse at center,
+      transparent 30%,
+      rgba(150, 20, 20, 0.55) 100%
+    );
+    opacity: 0;
+    transition: opacity 180ms ease;
+    z-index: 1;
+  }
+  &[data-tension-level='warn']     &__vignette { opacity: 0.55; }
+  &[data-tension-level='danger']   &__vignette { opacity: 0.75; animation: vignettePulse 480ms infinite alternate; }
+  &[data-tension-level='critical'] &__vignette { opacity: 0.9;  animation: vignettePulse 220ms infinite alternate; }
 
   &__top {
     display: flex;
@@ -14,6 +57,8 @@
     align-items: center;
     gap: var(--space-4);
     padding-top: var(--space-6);
+    position: relative;
+    z-index: 2;
   }
 
   &__round {
@@ -21,13 +66,47 @@
     font-weight: 800;
     letter-spacing: 0.2em;
     color: white;
-    text-shadow: 0 0.2rem 0.4rem rgba(0,0,0,0.2);
+    text-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.4);
   }
 
   &__middle {
     width: 100%;
     max-width: 40rem;
     align-self: center;
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  &__roundTimer {
+    width: 100%;
+    height: 0.6rem;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+  }
+
+  &__roundTimerFill {
+    height: 100%;
+    background: linear-gradient(90deg, #FFFFFF, rgba(255, 255, 255, 0.6));
+    transition: width 80ms linear;
+    border-radius: var(--radius-pill);
+  }
+
+  &__dangerLabel {
+    align-self: center;
+    margin-top: var(--space-1);
+    padding: var(--space-1) var(--space-3);
+    background: rgba(255, 255, 255, 0.95);
+    color: #C12B2B;
+    font-size: 1.6rem;
+    font-weight: 900;
+    letter-spacing: 0.2em;
+    border-radius: var(--radius-pill);
+    animation: dangerFlash 220ms infinite alternate;
+    box-shadow: 0 0 1.2rem rgba(255, 80, 80, 0.7);
   }
 
   &__bottom {
@@ -36,6 +115,8 @@
     align-items: center;
     gap: var(--space-3);
     padding-bottom: var(--space-6);
+    position: relative;
+    z-index: 2;
   }
 
   &__hint {
@@ -43,6 +124,34 @@
     color: white;
     margin: 0;
     text-align: center;
-    opacity: 0.85;
+    opacity: 0.9;
+    font-weight: 700;
+    text-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.35);
   }
+}
+
+@keyframes cameraShake {
+  0%   { transform: translate(-0.3rem, 0.2rem); }
+  100% { transform: translate(0.3rem, -0.2rem); }
+}
+
+@keyframes tugKick {
+  0%   { transform: scale(1)      translate(0, 0); }
+  40%  { transform: scale(1.015) translate(0.4rem, -0.3rem); }
+  100% { transform: scale(1)     translate(0, 0); }
+}
+
+@keyframes vignettePulse {
+  from { filter: brightness(0.95); }
+  to   { filter: brightness(1.15); }
+}
+
+@keyframes criticalPulse {
+  from { filter: brightness(1); }
+  to   { filter: brightness(1.2); }
+}
+
+@keyframes dangerFlash {
+  from { transform: scale(1);   filter: brightness(1); }
+  to   { transform: scale(1.06); filter: brightness(1.2); }
 }
