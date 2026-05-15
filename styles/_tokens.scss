@@ -1,0 +1,40 @@
+:root {
+  // Palette — Animal Crossing-cozy
+  --colors-primary1: #A8DADC;   // mint
+  --colors-primary2: #F1FAEE;   // cream
+  --colors-accent1:  #FFE5D9;   // peach
+  --colors-deep1:    #457B9D;   // deep blue
+  --colors-deep2:    #1D3557;   // ink
+  --colors-warning:  #E63946;   // alert red
+  --colors-gold:     #FFD93D;   // golden fish accent
+
+  --colors-text:        var(--colors-deep2);
+  --colors-text-soft:   #6B7B8A;
+  --colors-bg:          var(--colors-primary2);
+  --colors-surface:     #FFFFFF;
+  --colors-surface-alt: #F6FBF8;
+
+  // Tension states
+  --colors-tension-safe:    #6BBE89;
+  --colors-tension-warning: #FFC857;
+  --colors-tension-danger:  var(--colors-warning);
+
+  // Spacing (rem; 1rem = 10px)
+  --space-1: 0.4rem;
+  --space-2: 0.8rem;
+  --space-3: 1.2rem;
+  --space-4: 1.6rem;
+  --space-5: 2.4rem;
+  --space-6: 3.2rem;
+
+  // Radii
+  --radius-sm: 0.8rem;
+  --radius-md: 1.6rem;
+  --radius-lg: 2.4rem;
+  --radius-pill: 999px;
+
+  // Shadows
+  --shadow-sm: 0 0.2rem 0.6rem rgba(29, 53, 87, 0.08);
+  --shadow-md: 0 0.4rem 1.2rem rgba(29, 53, 87, 0.12);
+  --shadow-lg: 0 0.8rem 2.4rem rgba(29, 53, 87, 0.18);
+}
