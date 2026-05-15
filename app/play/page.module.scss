@@ -1,0 +1,24 @@
+.play {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+
+  &__hudWrap {
+    position: absolute;
+    top: var(--space-3);
+    left: var(--space-3);
+    right: var(--space-3);
+    z-index: 10;
+  }
+
+  &__castWrap {
+    position: absolute;
+    bottom: var(--space-5);
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    z-index: 10;
+  }
+}
