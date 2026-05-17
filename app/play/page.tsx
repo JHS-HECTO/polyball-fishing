@@ -6,6 +6,8 @@ import { Lake } from 'components/Lake';
 import { Angler } from 'components/Angler';
 import { Bobber } from 'components/Bobber';
 import { Splash } from 'components/Splash';
+import { FishingLine } from 'components/FishingLine';
+import { CatchSequence } from 'components/CatchSequence';
 import { CastButton } from 'components/CastButton';
 import { FightOverlay } from 'components/Fight/FightOverlay';
 import { ResultModal } from 'components/ResultModal';
@@ -30,7 +32,7 @@ import {
 import type { FishGrade, FishSpecies } from 'lib/types';
 import styles from './page.module.scss';
 
-type Phase = 'idle' | 'casting' | 'waiting' | 'bite' | 'fight' | 'result' | 'reward' | 'ad';
+type Phase = 'idle' | 'casting' | 'waiting' | 'bite' | 'fight' | 'catchAnim' | 'result' | 'reward' | 'ad';
 
 const CAST_ANIMATION_MS = 800;
 const TICKET_TIMEOUT_MS = 1500;
@@ -126,8 +128,16 @@ export default function PlayPage() {
           // timeout: treat as rejected (no reward modal)
         }, TICKET_TIMEOUT_MS);
       }
+
+      // Caught: play splash+leap sequence before showing the result modal.
+      setPhase('catchAnim');
+      return;
     }
 
+    setPhase('result');
+  };
+
+  const onCatchAnimDone = () => {
     setPhase('result');
   };
 
@@ -157,8 +167,9 @@ export default function PlayPage() {
     : phase === 'casting' ? 'arc'
     : phase === 'waiting' ? 'floating'
     : phase === 'bite' ? 'bite'
-    : phase === 'fight' || phase === 'result' || phase === 'reward' || phase === 'ad' ? 'sunken'
+    : phase === 'fight' || phase === 'catchAnim' || phase === 'result' || phase === 'reward' || phase === 'ad' ? 'sunken'
     : 'hidden';
+  const showLine = phase === 'waiting' || phase === 'bite';
 
   if (!mounted) return null;
 
@@ -170,8 +181,12 @@ export default function PlayPage() {
     <main className={styles.play}>
       <Lake>
         <Angler castedRod={phase !== 'idle'} />
+        <FishingLine visible={showLine} />
         <Bobber state={showBobber} />
         <Splash visible={showSplash} />
+        {phase === 'catchAnim' && species !== undefined && (
+          <CatchSequence grade={grade} species={species} onComplete={onCatchAnimDone} />
+        )}
       </Lake>
 
       <div className={styles.play__castWrap}>

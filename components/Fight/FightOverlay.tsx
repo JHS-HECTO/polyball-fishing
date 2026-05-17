@@ -129,39 +129,37 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
 
       const tugActive = now < tugUntilRef.current;
 
-      const jx = joystick.current.x;
-      const dir = fishDirRef.current;
-      let cls: InputDirection = 'none';
-      if (Math.abs(jx) > 0.12) {
-        cls = Math.sign(jx) !== dir ? 'correct' : 'wrong';
-      }
+      // Simple pull mechanic — any joystick deflection counts as pulling.
+      // No direction match required (less confusing). Tug events are the
+      // threat: during a tug, pulling barely makes progress and tension
+      // surges, so the player has to ride out short windows of crisis.
+      const jMag = Math.hypot(joystick.current.x, joystick.current.y);
+      const pulling = jMag > 0.12;
+      const cls: InputDirection = pulling ? 'correct' : 'none';
       if (cls !== lastInputClassRef.current) {
         if (cls === 'correct') {
           setFlashHit(true);
           setTimeout(() => setFlashHit(false), 120);
           vibrate('goodHit');
-        } else if (cls === 'wrong') {
-          vibrate('badHit');
         }
         lastInputClassRef.current = cls;
       }
 
-      // Tension update — wrong/none input pushes up, correct pulls down.
-      // Tug events accelerate tension rise + slow recovery.
+      // Tension update — pulling drains tension, idle/tug fills it.
       const upRate = cfg.tensionUpPerSec * (tugActive ? TUG_TENSION_RATE_MULT : 1);
-      const downRate = cfg.tensionDownPerSec * (tugActive ? 0.6 : 1);
+      const downRate = cfg.tensionDownPerSec * (tugActive ? 0.5 : 1);
       const nextTension = updateTension(tensionRef.current, cls, dt, { up: upRate, down: downRate });
       tensionRef.current = nextTension;
       setTension(nextTension);
 
-      // Catch progress — fills only on correct input. Drains slowly otherwise.
-      // During tug, progress drains faster (fish thrashes back).
+      // Catch progress — fills while pulling. Drains slowly when idle. During
+      // tugs progress is choked to ~30% of normal (fish thrashes back).
       let nextCatch = catchProgressRef.current;
-      if (cls === 'correct') {
-        nextCatch += cfg.staminaUpPerSec * dt;
+      if (pulling) {
+        const fillMult = tugActive ? 0.3 : 1;
+        nextCatch += cfg.staminaUpPerSec * dt * fillMult;
       } else {
-        const drainMult = tugActive ? 1.6 : 1;
-        nextCatch -= cfg.staminaDownPerSec * dt * drainMult;
+        nextCatch -= cfg.staminaDownPerSec * dt;
       }
       nextCatch = clamp(nextCatch, 0, 100);
       catchProgressRef.current = nextCatch;
@@ -232,7 +230,7 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       <div className={styles.fight__bottom}>
         <Joystick onChange={handleJoystick} />
         <p className={styles.fight__hint}>
-          {tugging ? '버텨!' : tensionLevel === 'critical' ? '계속!' : '반대 방향으로 끌어주세요'}
+          {tugging ? '버텨!' : tensionLevel === 'critical' ? '계속!' : '조이스틱 끌어!'}
         </p>
       </div>
     </div>
