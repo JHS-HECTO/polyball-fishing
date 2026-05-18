@@ -174,19 +174,20 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
         vibrate('bite');
       }
 
-      // Win conditions
+      // Win conditions — hold for ~400ms so the player sees the final 100%
+      // state flush to DOM before the parent unmounts this overlay.
       if (nextCatch >= 100) {
         finishedRef.current = true;
         stopRumble();
         vibrate(grade === 'golden' ? 'goldenCatch' : 'fishCaught');
-        onCompleteRef.current('caught');
+        setTimeout(() => onCompleteRef.current('caught'), 400);
         return;
       }
       if (nextTension >= 100) {
         finishedRef.current = true;
         stopRumble();
         vibrate('lineBreak');
-        onCompleteRef.current('broken');
+        setTimeout(() => onCompleteRef.current('broken'), 400);
         return;
       }
 
