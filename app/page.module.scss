@@ -1,3 +1,7 @@
+// Title screen — composition reads top-to-bottom:
+//   1. Reward badge (header chip)        — what you can win
+//   2. Hero stage (golden fish + halo)   — visual hook, dominant
+//   3. Content zone (brand → heading → CTA → hint) — the call to action
 .title {
   position: relative;
   min-height: 100vh;
@@ -16,85 +20,142 @@
     user-select: none;
   }
 
-  // Floating golden fish hero — the visual hook that says "catch me for a
-  // raffle ticket". Sits centered upper-mid of the screen above the heading.
+  // Top color wash — warm sunset gradient that the painted bg sits on top of.
+  // Adds depth and unifies the scene.
+  &__atmosphere {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 18%, rgba(255, 215, 130, 0.35), transparent 60%),
+      radial-gradient(ellipse 100% 60% at 50% 95%, rgba(29, 53, 87, 0.45), transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Reward badge (top chip)
+  &__rewardBadge {
+    position: absolute;
+    top: 4vh;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3) var(--space-2) var(--space-2);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 245, 225, 0.95));
+    border-radius: var(--radius-pill);
+    box-shadow:
+      0 0 0 0.25rem rgba(255, 217, 61, 0.55),
+      0 0.6rem 1.6rem rgba(0, 0, 0, 0.2);
+    z-index: 6;
+    backdrop-filter: blur(0.4rem);
+  }
+
+  &__rewardBadgeIcon {
+    width: 3.4rem;
+    height: 3.4rem;
+    object-fit: contain;
+    filter: drop-shadow(0 0.2rem 0.4rem rgba(0, 0, 0, 0.18));
+  }
+
+  &__rewardBadgeText {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+  }
+
+  &__rewardBadgeLabel {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: #6B7B8A;
+    text-transform: uppercase;
+  }
+
+  &__rewardBadgeValue {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #1D3557;
+    letter-spacing: -0.01em;
+  }
+
+  // ──────────────────────────────────────────────────────────────────────
+  // Hero stage — golden fish centerpiece
+  &__stage {
+    position: absolute;
+    top: 13vh;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(34rem, 90vw);
+    height: min(34rem, 90vw);
+    z-index: 2;
+    pointer-events: none;
+  }
+
+  &__stageGlow {
+    position: absolute;
+    inset: -4rem;
+    background: radial-gradient(circle at center, rgba(255, 217, 61, 0.65) 0%, rgba(255, 217, 61, 0.15) 40%, transparent 70%);
+    animation: stageGlow 3s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
+    z-index: 1;
+  }
+
+  &__stageSparkle {
+    position: absolute;
+    inset: -2rem;
+    width: calc(100% + 4rem);
+    height: calc(100% + 4rem);
+    object-fit: contain;
+    opacity: 0.6;
+    animation: stageSparkleSpin 12s linear infinite;
+    z-index: 2;
+    pointer-events: none;
+  }
+
   &__hero {
     position: absolute;
-    left: 50%;
-    top: 18vh;
-    width: 22rem;
-    height: 22rem;
-    transform: translateX(-50%);
-    pointer-events: none;
-    z-index: 2;
-    filter: drop-shadow(0 1rem 2rem rgba(0, 0, 0, 0.35));
+    inset: 0;
+    z-index: 3;
+    filter: drop-shadow(0 1.4rem 2.8rem rgba(0, 0, 0, 0.4));
   }
 
   &__heroImg {
-    position: absolute;
-    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: contain;
     user-select: none;
+  }
+
+  &__dot {
+    position: absolute;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    background: radial-gradient(circle, #FFF6D4 0%, rgba(255, 217, 61, 0) 70%);
     z-index: 2;
+
+    &[data-i='1'] { top: 15%; left: 12%; animation: dotFloat 3.2s ease-in-out infinite alternate; }
+    &[data-i='2'] { top: 28%; right: 8%;  animation: dotFloat 4.0s ease-in-out infinite alternate 0.6s; }
+    &[data-i='3'] { bottom: 22%; left: 18%; animation: dotFloat 3.6s ease-in-out infinite alternate 1.2s; width: 1.4rem; height: 1.4rem; }
+    &[data-i='4'] { bottom: 12%; right: 14%; animation: dotFloat 4.4s ease-in-out infinite alternate 1.8s; }
   }
 
-  // Warm halo behind the fish.
-  &__heroGlow {
-    position: absolute;
-    inset: -4rem;
-    background: radial-gradient(circle at center, rgba(255, 217, 61, 0.55), transparent 60%);
-    z-index: 1;
-    animation: heroGlowPulse 3s ease-in-out infinite alternate;
-    mix-blend-mode: screen;
-  }
-
-  // Slowly rotating sparkle ring overlay.
-  &__heroSparkle {
-    position: absolute;
-    inset: -3rem;
-    width: calc(100% + 6rem);
-    height: calc(100% + 6rem);
-    object-fit: contain;
-    opacity: 0.65;
-    animation: heroSparkleSpin 9s linear infinite;
-    z-index: 3;
-    pointer-events: none;
-  }
-
-  // Floating raffle ticket near the fish — bottom-right of the hero area.
-  &__ticket {
-    position: absolute;
-    top: 32vh;
-    left: 64%;
-    width: 8rem;
-    height: 6rem;
-    z-index: 3;
-    pointer-events: none;
-    filter: drop-shadow(0 0.6rem 1.2rem rgba(0, 0, 0, 0.3));
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      user-select: none;
-    }
-  }
-
-  // Bottom darkening fade so text + button pop against the pastel scene.
-  &__contentFade {
+  // ──────────────────────────────────────────────────────────────────────
+  // Bottom legibility wash so text/CTA pop against the painted scene
+  &__bottomFade {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
-    height: 55vh;
+    height: 48vh;
     background: linear-gradient(
       180deg,
       transparent 0%,
-      rgba(29, 53, 87, 0.05) 30%,
-      rgba(29, 53, 87, 0.45) 70%,
-      rgba(29, 53, 87, 0.7) 100%
+      rgba(29, 53, 87, 0.05) 25%,
+      rgba(29, 53, 87, 0.55) 65%,
+      rgba(20, 35, 60, 0.85) 100%
     );
     pointer-events: none;
     z-index: 3;
@@ -107,122 +168,185 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding: var(--space-5) var(--space-5) 10vh;
+    padding: var(--space-5) var(--space-5) 8vh;
     text-align: center;
-    gap: var(--space-3);
-    z-index: 4;
+    gap: var(--space-2);
+    z-index: 5;
+  }
+
+  &__brandRow {
+    margin-bottom: var(--space-1);
+  }
+
+  &__brandTag {
+    display: inline-block;
+    padding: 0.4rem 1.2rem;
+    background: rgba(255, 255, 255, 0.15);
+    border: 0.1rem solid rgba(255, 255, 255, 0.35);
+    border-radius: var(--radius-pill);
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.25em;
+    backdrop-filter: blur(0.4rem);
   }
 
   &__heading {
-    font-size: 5.2rem;
+    margin: 0 0 var(--space-1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+  }
+
+  &__headingTop {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #FFD93D;
+    letter-spacing: 0.4em;
+    margin-bottom: 0.4rem;
+    text-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.55);
+  }
+
+  &__headingBig {
+    font-size: 5.6rem;
     font-weight: 900;
-    margin: 0;
     color: #FFFFFF;
     letter-spacing: -0.05em;
     text-shadow:
       0 0.2rem 0 rgba(29, 53, 87, 0.95),
-      0 0.4rem 0 rgba(29, 53, 87, 0.9),
-      0 0.6rem 1.6rem rgba(0, 0, 0, 0.65),
-      0 0 2.4rem rgba(255, 217, 61, 0.35);
+      0 0.4rem 0 rgba(29, 53, 87, 0.85),
+      0 0.8rem 2rem rgba(0, 0, 0, 0.75),
+      0 0 3rem rgba(255, 217, 61, 0.4);
   }
 
   &__subtitle {
-    display: inline-block;
-    margin: 0;
-    padding: var(--space-2) var(--space-4);
-    font-size: 1.7rem;
-    font-weight: 800;
-    color: #1D3557;
-    background: rgba(255, 255, 255, 0.92);
-    border-radius: var(--radius-pill);
-    box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.25);
-    letter-spacing: -0.01em;
-  }
+    margin: var(--space-1) 0 var(--space-3);
+    font-size: 1.6rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    text-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.7);
+    letter-spacing: -0.005em;
 
-  &__actions {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    margin-top: var(--space-4);
-    width: min(30rem, 84vw);
-  }
-
-  // Upgraded CTA — gradient body, gold ring, pulse glow, press feedback.
-  &__cta {
-    position: relative;
-    background: linear-gradient(180deg, #5BA0C8 0%, #2F6A88 100%);
-    color: white;
-    font-size: 2rem;
-    font-weight: 800;
-    padding: var(--space-3) var(--space-5);
-    border-radius: var(--radius-pill);
-    text-align: center;
-    overflow: hidden;
-    box-shadow:
-      0 0 0 0.3rem rgba(255, 217, 61, 0.55),
-      0 0.6rem 2rem rgba(0, 0, 0, 0.35),
-      inset 0 0.2rem 0 rgba(255, 255, 255, 0.25);
-    letter-spacing: 0.04em;
-    transition: transform 140ms ease, box-shadow 140ms ease;
-    isolation: isolate;
-    animation: ctaPulse 2.4s ease-in-out infinite alternate;
-
-    &:active {
-      transform: scale(0.96);
-      box-shadow:
-        0 0 0 0.3rem rgba(255, 217, 61, 0.7),
-        0 0.2rem 0.6rem rgba(0, 0, 0, 0.35),
-        inset 0 0.2rem 0 rgba(255, 255, 255, 0.25);
+    b {
+      color: #FFD93D;
+      font-weight: 800;
     }
   }
 
-  &__ctaText {
+  // ──────────────────────────────────────────────────────────────────────
+  // Hero CTA — a wide, glossy capsule with icon + label + arrow.
+  &__cta {
     position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    width: min(32rem, 88vw);
+    padding: var(--space-4) var(--space-5);
+    background:
+      linear-gradient(180deg, #FFE680 0%, #FFCC33 55%, #E89B00 100%);
+    color: #1D3557;
+    font-size: 2.2rem;
+    font-weight: 900;
+    border-radius: 2rem;
+    overflow: hidden;
+    isolation: isolate;
+    box-shadow:
+      0 0 0 0.4rem #FFFFFF,
+      0 0 0 0.7rem rgba(232, 155, 0, 0.6),
+      0 1.2rem 0 rgba(180, 110, 0, 0.4),
+      0 1.6rem 2.4rem rgba(0, 0, 0, 0.45);
+    transition: transform 120ms ease, box-shadow 120ms ease;
+    animation: ctaBob 2.4s ease-in-out infinite alternate;
+
+    &:active {
+      transform: translateY(0.6rem);
+      box-shadow:
+        0 0 0 0.4rem #FFFFFF,
+        0 0 0 0.7rem rgba(232, 155, 0, 0.6),
+        0 0.4rem 0 rgba(180, 110, 0, 0.4),
+        0 0.6rem 1rem rgba(0, 0, 0, 0.45);
+    }
+  }
+
+  &__ctaIcon {
+    font-size: 2.6rem;
+    line-height: 1;
     z-index: 2;
   }
 
-  // Sliding sheen highlight on the button — subtle "shiny" feel.
-  &__ctaGlow {
+  &__ctaText {
+    z-index: 2;
+    letter-spacing: -0.02em;
+  }
+
+  &__ctaArrow {
+    z-index: 2;
+    font-size: 2.4rem;
+    font-weight: 900;
+    animation: ctaArrow 1.4s ease-in-out infinite alternate;
+  }
+
+  &__ctaSheen {
     position: absolute;
     inset: 0;
     background: linear-gradient(
       120deg,
       transparent 30%,
-      rgba(255, 255, 255, 0.55) 50%,
+      rgba(255, 255, 255, 0.7) 50%,
       transparent 70%
     );
     transform: translateX(-100%);
-    animation: ctaSheen 3.6s ease-in-out infinite;
+    animation: ctaSheen 3.4s ease-in-out infinite;
     z-index: 1;
     pointer-events: none;
   }
+
+  &__hint {
+    margin: var(--space-1) 0 0;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.7);
+    letter-spacing: 0.2em;
+    text-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
+    animation: hintPulse 2.2s ease-in-out infinite alternate;
+  }
 }
 
-@keyframes heroGlowPulse {
-  from { opacity: 0.55; transform: scale(0.95); }
-  to   { opacity: 1;    transform: scale(1.08); }
+// ────────────────────────────────────────────────────────────────────────
+@keyframes stageGlow {
+  from { opacity: 0.55; transform: scale(0.92); }
+  to   { opacity: 1;    transform: scale(1.12); }
 }
 
-@keyframes heroSparkleSpin {
+@keyframes stageSparkleSpin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
 }
 
-@keyframes ctaPulse {
-  from { box-shadow:
-    0 0 0 0.3rem rgba(255, 217, 61, 0.45),
-    0 0.6rem 1.6rem rgba(0, 0, 0, 0.3),
-    inset 0 0.2rem 0 rgba(255, 255, 255, 0.25);
-  }
-  to   { box-shadow:
-    0 0 0 0.5rem rgba(255, 217, 61, 0.75),
-    0 0.8rem 2.2rem rgba(0, 0, 0, 0.4),
-    inset 0 0.2rem 0 rgba(255, 255, 255, 0.3);
-  }
+@keyframes dotFloat {
+  from { transform: translate(0, 0)      scale(0.7); opacity: 0.6; }
+  to   { transform: translate(0.8rem, -0.8rem) scale(1.2); opacity: 1; }
+}
+
+@keyframes ctaBob {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-0.4rem); }
+}
+
+@keyframes ctaArrow {
+  from { transform: translateX(0); }
+  to   { transform: translateX(0.4rem); }
 }
 
 @keyframes ctaSheen {
   0%,  30% { transform: translateX(-100%); }
   60%      { transform: translateX(120%); }
   100%     { transform: translateX(120%); }
+}
+
+@keyframes hintPulse {
+  from { opacity: 0.45; }
+  to   { opacity: 0.9; }
 }
