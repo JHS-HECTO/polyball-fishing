@@ -130,11 +130,9 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       const tugActive = now < tugUntilRef.current;
 
       // Simple pull mechanic — any joystick deflection counts as pulling.
-      // No direction match required (less confusing). Tug events are the
-      // threat: during a tug, pulling barely makes progress and tension
-      // surges, so the player has to ride out short windows of crisis.
+      // Deadzone is intentionally tiny so a small tug already registers.
       const jMag = Math.hypot(joystick.current.x, joystick.current.y);
-      const pulling = jMag > 0.12;
+      const pulling = jMag > 0.05;
       const cls: InputDirection = pulling ? 'correct' : 'none';
       if (cls !== lastInputClassRef.current) {
         if (cls === 'correct') {
