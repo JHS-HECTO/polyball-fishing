@@ -8,21 +8,23 @@ import styles from './TicketProgress.module.scss';
 const MotionDiv = motion.div as ComponentType<any>;
 
 type Props = {
-  progress: number;          // 0..1 (current / target)
+  current: number;           // current points in the bar
+  target: number;            // target points to fill the bar
   ticketsClaimed: number;    // tickets claimed today
   ticketsMax: number;        // daily cap
-  /** Called when the player taps the claim button while progress is full. */
   onClaim: () => void;
-  /** When true, the next claim will require watching an ad. */
   needsAd: boolean;
-  /** When true, no more tickets are available today. */
   exhausted: boolean;
-  /** Compact rendering — used inside the play HUD. */
   compact?: boolean;
 };
 
+function formatPts(n: number): string {
+  return Math.floor(n).toLocaleString('ko-KR');
+}
+
 export function TicketProgress({
-  progress,
+  current,
+  target,
   ticketsClaimed,
   ticketsMax,
   onClaim,
@@ -30,7 +32,8 @@ export function TicketProgress({
   exhausted,
   compact = false,
 }: Props) {
-  const pct = Math.max(0, Math.min(1, progress));
+  const clampedCurrent = Math.max(0, Math.min(target, current));
+  const pct = target > 0 ? clampedCurrent / target : 0;
   const full = pct >= 1;
   const canClaim = full && !exhausted;
 
@@ -52,10 +55,8 @@ export function TicketProgress({
         />
         <span className={styles.barText}>
           {exhausted
-            ? '오늘 받을 응모권 다 받음 — 황금물고기 노려라!'
-            : full
-              ? '게이지 가득 — 응모권 받기!'
-              : `${Math.round(pct * 100)}%`}
+            ? '오늘 보상 다 받음 — 황금물고기 노려라!'
+            : `${formatPts(clampedCurrent)} / ${formatPts(target)}`}
         </span>
       </div>
 
@@ -71,7 +72,7 @@ export function TicketProgress({
         {exhausted
           ? '오늘 보상 마감'
           : !canClaim
-            ? '게이지를 채우세요'
+            ? '점수를 채우세요'
             : needsAd
               ? '🎬 광고 보고 응모권 받기'
               : '🎫 응모권 받기'}

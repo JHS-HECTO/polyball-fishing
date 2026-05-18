@@ -96,7 +96,7 @@ export default function TitlePage() {
 
   const exhausted = ticketsClaimedToday >= TICKETS_PER_DAY;
   const needsAd = ticketsClaimedToday >= 1;
-  const progress = mounted ? progressScore / PROGRESS_TARGET : 0;
+  const currentPts = mounted ? progressScore : 0;
 
   return (
     <main className={styles.title}>
@@ -137,13 +137,16 @@ export default function TitlePage() {
         </p>
 
         <TicketProgress
-          progress={progress}
+          current={currentPts}
+          target={PROGRESS_TARGET}
           ticketsClaimed={ticketsClaimedToday}
           ticketsMax={TICKETS_PER_DAY}
           needsAd={needsAd}
           exhausted={exhausted}
           onClaim={onClaim}
         />
+
+        <div className={styles.title__ctaSpacer} aria-hidden />
 
         <Link href={ROUTES.PLAY} className={styles.title__cta}>
           <span className={styles.title__ctaIcon}>🎣</span>

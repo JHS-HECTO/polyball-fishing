@@ -238,7 +238,8 @@ export default function PlayPage() {
       <div className={styles.play__hudWrap}>
         <TicketProgress
           compact
-          progress={progressScore / PROGRESS_TARGET}
+          current={progressScore}
+          target={PROGRESS_TARGET}
           ticketsClaimed={ticketsClaimedToday}
           ticketsMax={TICKETS_PER_DAY}
           needsAd={ticketsNeedAd}
