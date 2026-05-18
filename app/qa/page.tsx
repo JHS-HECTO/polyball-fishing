@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { TicketProgress } from 'components/TicketProgress';
 import { ResultModal } from 'components/ResultModal';
 import { GoldenRewardModal } from 'components/GoldenRewardModal';
+import { TicketClaimedModal } from 'components/TicketClaimedModal';
 import { FishSilhouette } from 'components/Fight/FishSilhouette';
 import { TensionMeter } from 'components/Fight/TensionMeter';
 import { Joystick } from 'components/Fight/Joystick';
@@ -115,8 +116,12 @@ export default function QAPage() {
       <Section title="3A. ad-prompt (광고 시청 권유)">
         <Phone><GoldenRewardModal mode="ad-prompt" onWatchAd={noop} onDecline={noop} /></Phone>
       </Section>
-      <Section title="3B. granted (응모권 지급 완료)">
+      <Section title="3B. granted (황금물고기 응모권 지급 완료)">
         <Phone><GoldenRewardModal mode="granted" count={1} onClose={noop} /></Phone>
+      </Section>
+
+      <Section title="3C. TicketClaimedModal (게이지 채워 응모권 지급)">
+        <Phone><TicketClaimedModal count={1} onClose={noop} /></Phone>
       </Section>
 
       {/* ─── Fight HUD pieces ─────────────────────────────────────────── */}

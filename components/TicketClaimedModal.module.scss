@@ -1,0 +1,77 @@
+.modal {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255, 217, 61, 0.3), rgba(29, 53, 87, 0.8));
+  z-index: 110;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+
+  &__card {
+    background: var(--colors-surface);
+    border-radius: var(--radius-lg);
+    padding: var(--space-6) var(--space-5);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    width: min(34rem, 100%);
+    text-align: center;
+    border-top: 0.8rem solid var(--colors-gold);
+    box-shadow: 0 0 5rem rgba(255, 217, 61, 0.4);
+  }
+
+  &__ticket {
+    width: 12rem;
+    height: 12rem;
+    perspective: 60rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &__ticketImg {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: drop-shadow(0 0 1.2rem rgba(255, 217, 61, 0.6));
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #1D3557;
+    letter-spacing: -0.02em;
+  }
+
+  &__subtitle {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #6B7B8A;
+    letter-spacing: -0.005em;
+  }
+
+  &__cta {
+    margin-top: var(--space-3);
+    width: 100%;
+    background: linear-gradient(180deg, #FFE680 0%, #FFCC33 55%, #E89B00 100%);
+    color: #1D3557;
+    font-size: 1.7rem;
+    font-weight: 900;
+    padding: var(--space-3) var(--space-5);
+    border-radius: 1.6rem;
+    box-shadow:
+      0 0 0 0.3rem #FFFFFF,
+      0 0 0 0.55rem rgba(232, 155, 0, 0.6),
+      0 0.8rem 0 rgba(180, 110, 0, 0.4),
+      0 1rem 2rem rgba(0, 0, 0, 0.3);
+    border: none;
+    cursor: pointer;
+    transition: transform 120ms ease;
+
+    &:active { transform: translateY(0.4rem); }
+  }
+}

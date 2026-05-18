@@ -22,6 +22,7 @@ IMG_DIR = ROOT / "public" / "images"
 SKIP = {
     "01-title-bg.png",
     "01-play-bg.png",
+    "22-fight-bg.png",
 }
 
 

@@ -32,6 +32,7 @@ import {
 import { PROGRESS_TARGET, TICKETS_PER_DAY } from 'lib/gameState';
 import { useDailyResetSync } from 'lib/useDailyResetSync';
 import { TicketProgress } from 'components/TicketProgress';
+import { TicketClaimedModal } from 'components/TicketClaimedModal';
 import type { FishGrade, FishSpecies } from 'lib/types';
 import styles from './page.module.scss';
 
@@ -62,6 +63,8 @@ export default function PlayPage() {
   const [showReward, setShowReward] = useState(false);
   const [claiming, setClaiming] = useState(false);
   const [claimSuccess, setClaimSuccess] = useState(false);
+  const [showGrantedToast, setShowGrantedToast] = useState(false);
+  const lastClaimSourceRef = useRef<'progress' | 'golden' | null>(null);
   const chamjilTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [mounted, setMounted] = useState(false);
 
@@ -93,8 +96,13 @@ export default function PlayPage() {
       if (msg.type === 'FISH:TICKET_GRANTED') {
         registerTicketClaimed();
         setClaiming(false);
-        setClaimSuccess(true);
-        setShowReward(true);
+        if (lastClaimSourceRef.current === 'golden') {
+          setClaimSuccess(true);
+          setShowReward(true);
+        } else {
+          // Progress-bar claim → show the standalone "granted" celebration.
+          setShowGrantedToast(true);
+        }
       }
       if (msg.type === 'FISH:TICKET_REJECTED') {
         setClaiming(false);
@@ -103,11 +111,12 @@ export default function PlayPage() {
     return cleanup;
   }, [registerPlayer, registerTicketClaimed]);
 
-  // Progress claim handler used by both pages — gated by adWatched count.
+  // Progress claim handler — first claim free, subsequent claims need an ad.
   const onClaim = () => {
     if (claiming) return;
     if (ticketsClaimedToday >= TICKETS_PER_DAY) return;
     setClaiming(true);
+    lastClaimSourceRef.current = 'progress';
     if (ticketsClaimedToday === 0) {
       sendClaimTicket('progress', false);
       setTimeout(() => setClaiming(false), 1500);
@@ -120,6 +129,7 @@ export default function PlayPage() {
   const onClaimGolden = () => {
     if (claiming) return;
     setClaiming(true);
+    lastClaimSourceRef.current = 'golden';
     sendPlayAdRewarded('golden');
   };
 
@@ -302,6 +312,9 @@ export default function PlayPage() {
               onDecline={declineGolden}
             />
           )
+        )}
+        {showGrantedToast && (
+          <TicketClaimedModal count={1} onClose={() => setShowGrantedToast(false)} />
         )}
       </AnimatePresence>
     </main>

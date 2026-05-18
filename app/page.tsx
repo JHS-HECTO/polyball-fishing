@@ -19,6 +19,8 @@ import {
   type FishParentMessage,
 } from 'lib/postMessage';
 import { TicketProgress } from 'components/TicketProgress';
+import { TicketClaimedModal } from 'components/TicketClaimedModal';
+import { AnimatePresence } from 'framer-motion';
 import styles from './page.module.scss';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -34,6 +36,7 @@ export default function TitlePage() {
 
   const [mounted, setMounted] = useState(false);
   const [claiming, setClaiming] = useState(false);
+  const [showGranted, setShowGranted] = useState(false);
   const claimTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingAdRef = useRef(false); // true while we wait for the ad to finish
 
@@ -69,6 +72,7 @@ export default function TitlePage() {
         registerTicketClaimed();
         setClaiming(false);
         pendingAdRef.current = false;
+        setShowGranted(true);
       }
       if (msg.type === 'FISH:TICKET_REJECTED') {
         if (claimTimer.current) clearTimeout(claimTimer.current);
@@ -156,6 +160,12 @@ export default function TitlePage() {
           <span className={styles.title__ctaSheen} aria-hidden />
         </Link>
       </div>
+
+      <AnimatePresence>
+        {showGranted && (
+          <TicketClaimedModal count={1} onClose={() => setShowGranted(false)} />
+        )}
+      </AnimatePresence>
     </main>
   );
 }
