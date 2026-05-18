@@ -22,7 +22,6 @@ import {
 } from 'lib/dailyCounter';
 import { vibrate } from 'lib/haptics';
 import {
-  sendPlayAd,
   sendPlayAdRewarded,
   sendReady,
   sendClaimTicket,
@@ -35,11 +34,9 @@ import { TicketProgress } from 'components/TicketProgress';
 import type { FishGrade, FishSpecies } from 'lib/types';
 import styles from './page.module.scss';
 
-type Phase = 'idle' | 'casting' | 'waiting' | 'bite' | 'fight' | 'catchAnim' | 'result' | 'reward' | 'ad' | 'missed';
+type Phase = 'idle' | 'casting' | 'waiting' | 'bite' | 'fight' | 'catchAnim' | 'result' | 'reward' | 'missed';
 
 const CAST_ANIMATION_MS = 800;
-const TICKET_TIMEOUT_MS = 1500;
-const ADS_EVERY = 5;
 // Hook-set ("챔질") timing window. Player must tap during this window after
 // the bobber dips. Too late → fish escapes.
 const CHAMJIL_WINDOW_MS = 1100;
@@ -49,9 +46,6 @@ export default function PlayPage() {
   const totalScore = useGameStore((s) => s.totalScore);
   const addScore = useGameStore((s) => s.addScore);
   const setTotalScore = useGameStore((s) => s.setTotalScore);
-  const castsSinceAd = useGameStore((s) => s.castsSinceAd);
-  const bumpCastsSinceAd = useGameStore((s) => s.bumpCastsSinceAd);
-  const resetCastsSinceAd = useGameStore((s) => s.resetCastsSinceAd);
 
   const registerPlayer = useGameStore((s) => s.registerPlayer);
   const bumpProgress = useGameStore((s) => s.bumpProgress);
@@ -168,7 +162,6 @@ export default function PlayPage() {
     setLastOutcome(result);
 
     incrementCast(todayString());
-    bumpCastsSinceAd();
 
     if (result === 'caught') {
       const cfg = gradeConfig(grade);
@@ -200,36 +193,24 @@ export default function PlayPage() {
 
   const closeResult = () => {
     setPhase('idle');
-    if (useGameStore.getState().castsSinceAd >= ADS_EVERY) {
-      resetCastsSinceAd();
-      setPhase('ad');
-      sendPlayAd();
-    }
   };
 
   const closeReward = () => {
     setShowReward(false);
     setClaimSuccess(false);
     setPhase('idle');
-    if (useGameStore.getState().castsSinceAd >= ADS_EVERY) {
-      resetCastsSinceAd();
-      setPhase('ad');
-      sendPlayAd();
-    }
   };
 
   const declineGolden = () => {
     // User chose not to watch ad — close without claiming.
     closeReward();
   };
-
-  void castsSinceAd; // counter exists for ad gating but no HUD displays it
   const showBobber: 'hidden' | 'arc' | 'floating' | 'bite' | 'sunken' =
     phase === 'idle' ? 'hidden'
     : phase === 'casting' ? 'arc'
     : phase === 'waiting' ? 'floating'
     : phase === 'bite' ? 'bite'
-    : phase === 'fight' || phase === 'catchAnim' || phase === 'result' || phase === 'reward' || phase === 'ad' ? 'sunken'
+    : phase === 'fight' || phase === 'catchAnim' || phase === 'result' || phase === 'reward' ? 'sunken'
     : 'hidden';
   const showLine = phase === 'casting' || phase === 'waiting' || phase === 'bite';
 
@@ -278,7 +259,6 @@ export default function PlayPage() {
               phase === 'casting' ? '던지는 중…' :
               phase === 'waiting' ? '기다리는 중…' :
               phase === 'missed' ? '놓쳤다!' :
-              phase === 'ad' ? '광고 재생 중…' :
               '진행 중'
             }
           />

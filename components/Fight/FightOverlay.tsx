@@ -257,6 +257,13 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
   return (
     <div className={containerClasses} data-tension-level={tensionLevel}>
       <div className={styles.fight__vignette} aria-hidden />
+      <div className={styles.fight__vortex} aria-hidden />
+      <div className={styles.fight__speedLines} aria-hidden />
+
+      {/* Intro stamp — flashes for ~0.6s when fight begins */}
+      <div className={styles.fight__intro} aria-hidden>
+        <span className={styles.fight__introText}>FIGHT!</span>
+      </div>
 
       <div className={styles.fight__top}>
         <div className={styles.fight__catchLabel}>잡기 진행도</div>

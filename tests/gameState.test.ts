@@ -24,16 +24,24 @@ describe('game store', () => {
     expect(useGameStore.getState().totalScore).toBe(150);
   });
 
-  it('tracks adsTillNext counter', () => {
-    expect(useGameStore.getState().castsSinceAd).toBe(0);
-    useGameStore.getState().bumpCastsSinceAd();
-    useGameStore.getState().bumpCastsSinceAd();
-    expect(useGameStore.getState().castsSinceAd).toBe(2);
+  it('bumps progress score', () => {
+    useGameStore.getState().bumpProgress(300);
+    useGameStore.getState().bumpProgress(500);
+    expect(useGameStore.getState().progressScore).toBe(800);
   });
 
-  it('resets castsSinceAd', () => {
-    useGameStore.getState().bumpCastsSinceAd();
-    useGameStore.getState().resetCastsSinceAd();
-    expect(useGameStore.getState().castsSinceAd).toBe(0);
+  it('registers a ticket claim and resets progress', () => {
+    useGameStore.getState().bumpProgress(1000);
+    useGameStore.getState().registerTicketClaimed();
+    expect(useGameStore.getState().ticketsClaimedToday).toBe(1);
+    expect(useGameStore.getState().progressScore).toBe(0);
+  });
+
+  it('resets daily counters when the date changes', () => {
+    useGameStore.getState().syncDailyState('2026-05-18');
+    useGameStore.getState().registerTicketClaimed();
+    useGameStore.getState().syncDailyState('2026-05-19');
+    expect(useGameStore.getState().ticketsClaimedToday).toBe(0);
+    expect(useGameStore.getState().progressScore).toBe(0);
   });
 });

@@ -10,7 +10,6 @@ export const TICKETS_PER_DAY = 3;
 type GameState = {
   player: Player | null;
   totalScore: number;
-  castsSinceAd: number;
   // Progress bar that fills with score deltas until PROGRESS_TARGET; resets on claim.
   progressScore: number;
   // Tickets claimed today (display only — server is authoritative for grant).
@@ -23,8 +22,6 @@ type GameActions = {
   registerPlayer: (p: Player) => void;
   addScore: (delta: number) => void;
   setTotalScore: (n: number) => void;
-  bumpCastsSinceAd: () => void;
-  resetCastsSinceAd: () => void;
   bumpProgress: (delta: number) => void;
   // Called after server confirms ticket granted — increments counter, resets progress.
   registerTicketClaimed: () => void;
@@ -35,7 +32,6 @@ type GameActions = {
 const initial: GameState = {
   player: null,
   totalScore: 0,
-  castsSinceAd: 0,
   progressScore: 0,
   ticketsClaimedToday: 0,
   ticketsDate: '',
@@ -48,8 +44,6 @@ export const useGameStore = create<GameState & GameActions>()(
       registerPlayer: (p) => set({ player: p }),
       addScore: (delta) => set((s) => ({ totalScore: s.totalScore + delta })),
       setTotalScore: (n) => set({ totalScore: n }),
-      bumpCastsSinceAd: () => set((s) => ({ castsSinceAd: s.castsSinceAd + 1 })),
-      resetCastsSinceAd: () => set({ castsSinceAd: 0 }),
       bumpProgress: (delta) =>
         set((s) => ({ progressScore: Math.min(PROGRESS_TARGET, s.progressScore + delta) })),
       registerTicketClaimed: () =>
