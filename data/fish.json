@@ -59,10 +59,10 @@
       "grade": "golden",
       "probability": 0.005,
       "score": 2000,
-      "staminaUpPerSec": 12,
-      "staminaDownPerSec": 15,
-      "tensionUpPerSec": 32,
-      "tensionDownPerSec": 10,
+      "staminaUpPerSec": 18,
+      "staminaDownPerSec": 11,
+      "tensionUpPerSec": 22,
+      "tensionDownPerSec": 14,
       "species": [
         { "id": "golden-1", "name": "황금 잉어", "grade": "golden", "image": "/images/14-golden.png" }
       ]
