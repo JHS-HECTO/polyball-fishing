@@ -33,7 +33,9 @@ export function TicketProgress({
   compact = false,
 }: Props) {
   const clampedCurrent = Math.max(0, Math.min(target, current));
-  const pct = target > 0 ? clampedCurrent / target : 0;
+  // When the daily cap is reached, lock the bar visually at 100% so it reads
+  // as "complete for today" instead of looking like it just reset.
+  const pct = exhausted ? 1 : (target > 0 ? clampedCurrent / target : 0);
   const full = pct >= 1;
   const canClaim = full && !exhausted;
 
