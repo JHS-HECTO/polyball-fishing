@@ -55,7 +55,7 @@ export function TicketProgress({
         />
         <span className={styles.barText}>
           {exhausted
-            ? '오늘 보상 다 받음 — 황금물고기 노려라!'
+            ? '황금물고기를 노려 응모권을 받아보세요'
             : `${formatPts(clampedCurrent)} / ${formatPts(target)}`}
         </span>
       </div>

@@ -182,17 +182,19 @@ export default function PlayPage() {
   };
 
   const onCatchAnimDone = () => {
-    if (grade === 'golden') {
-      // Golden caught → show ad-prompt modal (player decides to watch ad).
-      setClaimSuccess(false);
-      setShowReward(true);
-      setPhase('reward');
-    } else {
-      setPhase('result');
-    }
+    // All grades land on the result modal first. Golden then transitions to
+    // the ad-prompt modal once the player closes the result card.
+    setPhase('result');
   };
 
   const closeResult = () => {
+    if (grade === 'golden' && lastOutcome === 'caught') {
+      // Chain into golden reward flow — ad-prompt modal.
+      setClaimSuccess(false);
+      setShowReward(true);
+      setPhase('reward');
+      return;
+    }
     setPhase('idle');
   };
 
