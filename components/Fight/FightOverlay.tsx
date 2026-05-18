@@ -57,7 +57,6 @@ function clamp(n: number, lo: number, hi: number): number {
 export function FightOverlay({ grade, species, onComplete }: Props) {
   const cfg = gradeConfig(grade);
   const [tension, setTension] = useState(0);
-  const [catchProgress, setCatchProgress] = useState(0);
   const [fishDir, setFishDir] = useState<-1 | 1>(() => pickFishDirection());
   const [flashHit, setFlashHit] = useState(false);
   const [tugging, setTugging] = useState(false);
@@ -74,6 +73,12 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
   const heartbeatLastRef = useRef<number>(0);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
+  // Direct DOM refs — gauge widths update every RAF tick without going
+  // through React's reconciler, eliminating perceived lag.
+  const catchFillRef = useRef<HTMLDivElement | null>(null);
+  const tensionFillRef = useRef<HTMLDivElement | null>(null);
+  // Throttle React state syncs for tension level transitions (vignette, shake)
+  const lastTensionSyncRef = useRef<number>(0);
 
   // Fish direction loop
   useEffect(() => {
@@ -153,7 +158,20 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       const downRate = cfg.tensionDownPerSec * (tugActive ? 0.5 : 1);
       const nextTension = updateTension(tensionRef.current, cls, dt, { up: upRate, down: downRate });
       tensionRef.current = nextTension;
-      setTension(nextTension);
+      // Direct DOM update bypasses React's batching so the gauge tracks each
+      // RAF tick exactly. State syncing (for tension-level transitions) is
+      // throttled to ~10fps so vignette/shake/danger-label classes update.
+      if (tensionFillRef.current) {
+        tensionFillRef.current.style.width = `${nextTension}%`;
+        tensionFillRef.current.setAttribute(
+          'data-state',
+          nextTension >= 80 ? 'danger' : nextTension >= 50 ? 'warning' : 'safe',
+        );
+      }
+      if (now - lastTensionSyncRef.current > 100) {
+        lastTensionSyncRef.current = now;
+        setTension(nextTension);
+      }
 
       // Catch progress — fills while pulling. Drains slowly when idle. During
       // tugs progress is choked to ~30% of normal (fish thrashes back).
@@ -166,7 +184,9 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       }
       nextCatch = clamp(nextCatch, 0, 100);
       catchProgressRef.current = nextCatch;
-      setCatchProgress(nextCatch);
+      if (catchFillRef.current) {
+        catchFillRef.current.style.width = `${nextCatch}%`;
+      }
 
       // Heartbeat haptic when tension high
       if (nextTension >= HEARTBEAT_THRESHOLD && now - heartbeatLastRef.current > 600) {
@@ -221,8 +241,9 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
         <div className={styles.fight__catchLabel}>잡기 진행도</div>
         <div className={styles.fight__catchBar}>
           <div
+            ref={catchFillRef}
             className={styles.fight__catchFill}
-            style={{ width: `${catchProgress}%` }}
+            style={{ width: '0%' }}
           />
         </div>
         {species !== undefined
@@ -232,7 +253,7 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       </div>
 
       <div className={styles.fight__middle}>
-        <TensionMeter value={tension} />
+        <TensionMeter ref={tensionFillRef} value={tension} />
         {tension >= 90 && <div className={styles.fight__dangerLabel}>위험!</div>}
       </div>
 
