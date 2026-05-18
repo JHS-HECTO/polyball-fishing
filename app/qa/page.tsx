@@ -177,11 +177,11 @@ export default function QAPage() {
       {/* ─── Buttons ─────────────────────────────────────────── */}
       <h2 className={styles.group}>5. CastButton 상태별</h2>
 
-      <Section title="5A. 활성 (캐스팅!)">
+      <Section title="5A. 활성 (던지기!)">
         <div className={styles.center}><CastButton onClick={noop} /></div>
       </Section>
-      <Section title="5B. 활성 (챔질!)" note="입질시 라벨 변경">
-        <div className={styles.center}><CastButton onClick={noop} label="🎣 챔질!" /></div>
+      <Section title="5B. 활성 (당기기!)" note="입질시 라벨 변경">
+        <div className={styles.center}><CastButton onClick={noop} label="🎣 당기기!" /></div>
       </Section>
       <Section title="5C. 비활성">
         <div className={styles.center}><CastButton onClick={noop} disabled label="기다리는 중…" /></div>

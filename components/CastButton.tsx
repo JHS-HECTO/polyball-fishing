@@ -9,7 +9,7 @@ type Props = {
   label?: string;
 };
 
-export function CastButton({ onClick, disabled = false, label = '캐스팅!' }: Props) {
+export function CastButton({ onClick, disabled = false, label = '던지기!' }: Props) {
   return (
     <button
       className={clsx(styles.cast, { [styles['cast--disabled'] as string]: disabled })}

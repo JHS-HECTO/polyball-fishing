@@ -273,13 +273,13 @@ export default function PlayPage() {
 
       <div className={styles.play__castWrap}>
         {phase === 'bite' ? (
-          <CastButton onClick={onChamjil} label="🎣 챔질!" />
+          <CastButton onClick={onChamjil} label="🎣 당기기!" />
         ) : (
           <CastButton
             onClick={startCast}
             disabled={phase !== 'idle'}
             label={
-              phase === 'idle' ? '캐스팅!' :
+              phase === 'idle' ? '던지기!' :
               phase === 'casting' ? '던지는 중…' :
               phase === 'waiting' ? '기다리는 중…' :
               phase === 'missed' ? '놓쳤다!' :
