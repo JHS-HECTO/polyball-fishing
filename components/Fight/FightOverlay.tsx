@@ -22,20 +22,20 @@ type Props = {
 // fish wins when tension reaches 100. Fish direction changes randomly and
 // occasional "tug" events spike tension.
 const DIR_CHANGE_RANGE_MS: Record<FishGrade, [number, number]> = {
-  trash:  [700, 1100],
-  normal: [550, 1000],
-  rare:   [400, 800],
-  big:    [300, 700],
-  golden: [250, 550],
+  trash:  [900, 1300],
+  normal: [750, 1200],
+  rare:   [600, 1000],
+  big:    [500, 900],
+  golden: [400, 800],
 };
 
 // Tug events — fish makes a sudden hard pull. More for bigger fish.
 const TUG_RANGE_MS: Record<FishGrade, [number, number]> = {
-  trash:  [7000, 9000],    // very rare
-  normal: [2800, 5000],
-  rare:   [1800, 3500],
-  big:    [1300, 2800],
-  golden: [900, 2200],
+  trash:  [9000, 12000],   // basically none
+  normal: [4000, 6500],
+  rare:   [2500, 4500],
+  big:    [2000, 3500],
+  golden: [1300, 2800],
 };
 const TUG_DURATION_MS = 700;
 const TUG_TENSION_RATE_MULT = 2.6;
