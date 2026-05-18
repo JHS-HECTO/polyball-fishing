@@ -59,7 +59,6 @@ export function FishingLine({
           y2={coords.y2}
           stroke="rgba(255, 255, 255, 0.95)"
           strokeWidth="1.5"
-          strokeDasharray="4 3"
           vectorEffect="non-scaling-stroke"
         />
       )}

@@ -6,3 +6,5 @@ out
 *.log
 .vercel
 coverage
+
+.vercel

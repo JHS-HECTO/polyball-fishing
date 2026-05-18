@@ -1,8 +1,9 @@
-// Bobber rest position inside the lake. Sized for the rendered sprite.
+// Bobber rest position — pushed further into the lake (further from the
+// dock/angler) so the cast reads as a real long throw.
 .bobber {
   position: absolute;
   left: calc(50% + 0.5rem);
-  top: 47vh;
+  top: 32vh;
   width: 4rem;
   height: 4rem;
   transform: translateX(-50%);

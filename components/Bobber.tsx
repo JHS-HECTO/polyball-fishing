@@ -19,14 +19,16 @@ type Props = {
 const variants = {
   hidden: { opacity: 0, x: 0, y: 0, scale: 0 },
   arc: {
-    opacity: [0, 1, 1],
-    x: [-72, 0],
-    y: [-280, -180, -40, 8, 0],
-    scale: [0.6, 1],
+    opacity: [0, 1, 1, 1, 1],
+    // Throw starts at the rod tip area (well below + slightly right of the
+    // resting point in the upper lake) and follows a parabolic arc up, over,
+    // and down onto the water.
+    x: [22, 14, 6, 2, 0],
+    y: [320, 60, -160, -40, 0],
+    scale: [0.45, 0.7, 1, 1, 1],
     transition: {
-      duration: 0.7,
-      times: [0, 1],
-      ease: 'easeIn' as const,
+      duration: 1.0,
+      ease: 'easeOut' as const,
     },
   },
   floating: {

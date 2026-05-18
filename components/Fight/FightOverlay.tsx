@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import type { FishGrade, FishSpecies } from 'lib/types';
 import { gradeConfig } from 'lib/fish';
 import { updateTension, type InputDirection } from 'lib/tension';
-import { vibrate } from 'lib/haptics';
+import { vibrate, startRumble, stopRumble } from 'lib/haptics';
 import { Joystick, type JoystickValue } from './Joystick';
 import { TensionMeter } from './TensionMeter';
 import { FishSilhouette } from './FishSilhouette';
@@ -140,7 +140,9 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
         if (cls === 'correct') {
           setFlashHit(true);
           setTimeout(() => setFlashHit(false), 120);
-          vibrate('goodHit');
+          startRumble();
+        } else {
+          stopRumble();
         }
         lastInputClassRef.current = cls;
       }
@@ -174,12 +176,14 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       // Win conditions
       if (nextCatch >= 100) {
         finishedRef.current = true;
+        stopRumble();
         vibrate(grade === 'golden' ? 'goldenCatch' : 'fishCaught');
         onCompleteRef.current('caught');
         return;
       }
       if (nextTension >= 100) {
         finishedRef.current = true;
+        stopRumble();
         vibrate('lineBreak');
         onCompleteRef.current('broken');
         return;
@@ -189,7 +193,10 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
     };
 
     rafId = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(rafId);
+    return () => {
+      cancelAnimationFrame(rafId);
+      stopRumble();
+    };
   }, [cfg.tensionUpPerSec, cfg.tensionDownPerSec, cfg.staminaUpPerSec, cfg.staminaDownPerSec, grade]);
 
   const tensionLevel: 'safe' | 'warn' | 'danger' | 'critical' =
