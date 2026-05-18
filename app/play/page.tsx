@@ -32,11 +32,14 @@ import {
 import type { FishGrade, FishSpecies } from 'lib/types';
 import styles from './page.module.scss';
 
-type Phase = 'idle' | 'casting' | 'waiting' | 'bite' | 'fight' | 'catchAnim' | 'result' | 'reward' | 'ad';
+type Phase = 'idle' | 'casting' | 'waiting' | 'bite' | 'fight' | 'catchAnim' | 'result' | 'reward' | 'ad' | 'missed';
 
 const CAST_ANIMATION_MS = 800;
 const TICKET_TIMEOUT_MS = 1500;
 const ADS_EVERY = 5;
+// Hook-set ("챔질") timing window. Player must tap during this window after
+// the bobber dips. Too late → fish escapes.
+const CHAMJIL_WINDOW_MS = 1100;
 
 export default function PlayPage() {
   const player = useGameStore((s) => s.player);
@@ -56,6 +59,7 @@ export default function PlayPage() {
   const [showSplash, setShowSplash] = useState(false);
   const [showReward, setShowReward] = useState(false);
   const pendingTicketTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const chamjilTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -98,15 +102,28 @@ export default function PlayPage() {
       setTimeout(() => {
         setPhase('bite');
         vibrate('bite');
-        setTimeout(() => {
-          const g = rollGrade();
-          const s = pickSpecies(g);
-          setGrade(g);
-          setSpecies(s);
-          setPhase('fight');
-        }, 700);
+        // Hook-set window — player must tap (chamjil button) during this
+        // window or the fish gets away.
+        chamjilTimer.current = setTimeout(() => {
+          setPhase('missed');
+          vibrate('lineBreak');
+          setTimeout(() => setPhase('idle'), 1200);
+        }, CHAMJIL_WINDOW_MS);
       }, biteAfter);
     }, CAST_ANIMATION_MS);
+  };
+
+  // Player taps chamjil within the window → successful hook-set → fight.
+  const onChamjil = () => {
+    if (phase !== 'bite') return;
+    if (chamjilTimer.current) clearTimeout(chamjilTimer.current);
+    chamjilTimer.current = null;
+    vibrate('goodHit');
+    const g = rollGrade();
+    const s = pickSpecies(g);
+    setGrade(g);
+    setSpecies(s);
+    setPhase('fight');
   };
 
   const onFightComplete = (result: 'caught' | 'escaped' | 'broken') => {
@@ -190,18 +207,22 @@ export default function PlayPage() {
       </Lake>
 
       <div className={styles.play__castWrap}>
-        <CastButton
-          onClick={startCast}
-          disabled={phase !== 'idle'}
-          label={
-            phase === 'idle' ? '캐스팅!' :
-            phase === 'casting' ? '던지는 중…' :
-            phase === 'waiting' ? '기다리는 중…' :
-            phase === 'bite' ? '입질!' :
-            phase === 'ad' ? '광고 재생 중…' :
-            '진행 중'
-          }
-        />
+        {phase === 'bite' ? (
+          <CastButton onClick={onChamjil} label="🎣 챔질!" />
+        ) : (
+          <CastButton
+            onClick={startCast}
+            disabled={phase !== 'idle'}
+            label={
+              phase === 'idle' ? '캐스팅!' :
+              phase === 'casting' ? '던지는 중…' :
+              phase === 'waiting' ? '기다리는 중…' :
+              phase === 'missed' ? '놓쳤다!' :
+              phase === 'ad' ? '광고 재생 중…' :
+              '진행 중'
+            }
+          />
+        )}
       </div>
 
       {phase === 'fight' && (

@@ -1,7 +1,10 @@
 .fight {
   position: fixed;
   inset: 0;
-  background: linear-gradient(180deg, rgba(168, 218, 220, 0.95), rgba(69, 123, 157, 0.95));
+  background:
+    radial-gradient(ellipse 100% 40% at 50% 0%, rgba(255, 240, 220, 0.35), transparent 60%),
+    radial-gradient(ellipse 80% 50% at 50% 100%, rgba(20, 35, 60, 0.4), transparent 70%),
+    linear-gradient(180deg, rgba(120, 200, 220, 0.96) 0%, rgba(50, 130, 165, 0.96) 60%, rgba(25, 70, 105, 0.96) 100%);
   z-index: 50;
   display: flex;
   flex-direction: column;
@@ -9,6 +12,34 @@
   padding: var(--space-5);
   overflow: hidden;
   transition: background 200ms ease;
+
+  // Decorative top frame band — sunny rim suggests we're underwater looking up.
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 18vh;
+    background:
+      radial-gradient(ellipse 50% 100% at 50% 0%, rgba(255, 248, 200, 0.45), transparent 70%),
+      linear-gradient(180deg, rgba(255, 230, 180, 0.4), transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  // Decorative bottom frame band — dark depths
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 22vh;
+    background: linear-gradient(180deg, transparent 0%, rgba(10, 30, 55, 0.55) 100%);
+    pointer-events: none;
+    z-index: 1;
+  }
 
   // Tension-driven background tint (red wash creeps in as tension climbs)
   &[data-tension-level='warn'] {
@@ -145,6 +176,76 @@
       transform: scale(1.08);
     }
   }
+
+  // ────────────────────────────────────────────────────────────────────
+  // Direction guide arrow — large pulsing chevron showing the correct
+  // pull direction. Sits above the fish silhouette, flips left/right.
+  &__guide {
+    position: absolute;
+    top: 16vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+    pointer-events: none;
+    z-index: 4;
+    transition: left 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
+                right 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    &[data-dir='left']  { left: 6vw;  right: auto; }
+    &[data-dir='right'] { right: 6vw; left: auto; }
+  }
+
+  &__guideArrow {
+    font-size: 7rem;
+    line-height: 1;
+    font-weight: 900;
+    color: #FFD93D;
+    text-shadow:
+      0 0 1.4rem rgba(255, 217, 61, 0.8),
+      0 0.4rem 0 rgba(180, 110, 0, 0.9),
+      0 0.8rem 2rem rgba(0, 0, 0, 0.5);
+    animation: guideBounce 0.7s ease-in-out infinite alternate;
+  }
+
+  &__guideLabel {
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #FFFFFF;
+    letter-spacing: 0.05em;
+    padding: 0.4rem 0.8rem;
+    background: rgba(0, 0, 0, 0.55);
+    border-radius: var(--radius-pill);
+    text-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.5);
+  }
+
+  // ────────────────────────────────────────────────────────────────────
+  // Floating water bubbles — ambient depth detail.
+  &__bubbles {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+
+    span {
+      position: absolute;
+      bottom: -3rem;
+      width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle at 35% 35%, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.2) 50%, transparent 70%);
+      opacity: 0.7;
+      filter: blur(0.05rem);
+
+      &[data-i='1'] { left: 12%; animation: bubbleRise 7s linear infinite; }
+      &[data-i='2'] { left: 28%; animation: bubbleRise 9s linear infinite 1.2s; width: 1rem; height: 1rem; opacity: 0.5; }
+      &[data-i='3'] { left: 44%; animation: bubbleRise 11s linear infinite 2.6s; width: 1.8rem; height: 1.8rem; }
+      &[data-i='4'] { left: 62%; animation: bubbleRise 8s linear infinite 0.8s; }
+      &[data-i='5'] { left: 78%; animation: bubbleRise 12s linear infinite 3.4s; width: 1rem; height: 1rem; opacity: 0.4; }
+      &[data-i='6'] { left: 90%; animation: bubbleRise 10s linear infinite 4.5s; width: 1.6rem; height: 1.6rem; }
+    }
+  }
 }
 
 @keyframes cameraShake {
@@ -171,4 +272,16 @@
 @keyframes dangerFlash {
   from { transform: scale(1);   filter: brightness(1); }
   to   { transform: scale(1.06); filter: brightness(1.2); }
+}
+
+@keyframes guideBounce {
+  from { transform: scale(0.9) translateY(0);   filter: brightness(0.95); }
+  to   { transform: scale(1.15) translateY(-0.4rem); filter: brightness(1.2); }
+}
+
+@keyframes bubbleRise {
+  0%   { transform: translateY(0)         translateX(0); opacity: 0; }
+  10%  { opacity: 0.7; }
+  90%  { opacity: 0.6; }
+  100% { transform: translateY(-110vh)    translateX(2rem); opacity: 0; }
 }

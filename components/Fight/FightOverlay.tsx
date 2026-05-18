@@ -22,20 +22,20 @@ type Props = {
 // fish wins when tension reaches 100. Fish direction changes randomly and
 // occasional "tug" events spike tension.
 const DIR_CHANGE_RANGE_MS: Record<FishGrade, [number, number]> = {
-  trash:  [900, 1400],
-  normal: [700, 1300],
-  rare:   [550, 1100],
-  big:    [400, 950],
-  golden: [320, 800],
+  trash:  [700, 1100],
+  normal: [550, 1000],
+  rare:   [400, 800],
+  big:    [300, 700],
+  golden: [250, 550],
 };
 
 // Tug events — fish makes a sudden hard pull. More for bigger fish.
 const TUG_RANGE_MS: Record<FishGrade, [number, number]> = {
-  trash:  [9999, 9999],   // effectively none
-  normal: [3500, 6000],
-  rare:   [2500, 5000],
-  big:    [2000, 4000],
-  golden: [1500, 3500],
+  trash:  [7000, 9000],    // very rare
+  normal: [2800, 5000],
+  rare:   [1800, 3500],
+  big:    [1300, 2800],
+  golden: [900, 2200],
 };
 const TUG_DURATION_MS = 700;
 const TUG_TENSION_RATE_MULT = 2.6;
@@ -135,17 +135,27 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
 
       const tugActive = now < tugUntilRef.current;
 
-      // Simple pull mechanic — any joystick deflection counts as pulling.
-      // Deadzone is intentionally tiny so a small tug already registers.
-      const jMag = Math.hypot(joystick.current.x, joystick.current.y);
-      const pullingNow = jMag > 0.05;
-      const cls: InputDirection = pullingNow ? 'correct' : 'none';
+      // Direction-matching pull mechanic. Player must drag the joystick in
+      // the OPPOSITE direction of the fish to land progress. Same-direction
+      // drag actively hurts (tension climbs faster, catch drains).
+      const jx = joystick.current.x;
+      const dir = fishDirRef.current;
+      const jMag = Math.abs(jx);
+      let cls: InputDirection = 'none';
+      if (jMag > 0.18) {
+        cls = Math.sign(jx) !== dir ? 'correct' : 'wrong';
+      }
+      const pullingNow = cls === 'correct';
       if (cls !== lastInputClassRef.current) {
         if (cls === 'correct') {
           setFlashHit(true);
           setTimeout(() => setFlashHit(false), 120);
           setPulling(true);
           startRumble();
+        } else if (cls === 'wrong') {
+          setPulling(false);
+          stopRumble();
+          vibrate('badHit');
         } else {
           setPulling(false);
           stopRumble();
@@ -153,10 +163,19 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
         lastInputClassRef.current = cls;
       }
 
-      // Tension update — pulling drains tension, idle/tug fills it.
+      // Tension update — correct pull drains, idle climbs, wrong-direction
+      // pull penalizes hard. Tug events further boost the climb rate.
       const upRate = cfg.tensionUpPerSec * (tugActive ? TUG_TENSION_RATE_MULT : 1);
       const downRate = cfg.tensionDownPerSec * (tugActive ? 0.5 : 1);
-      const nextTension = updateTension(tensionRef.current, cls, dt, { up: upRate, down: downRate });
+      const wrongPenalty = 1.8;
+      let nextTension = tensionRef.current;
+      if (cls === 'correct') {
+        nextTension = Math.max(0, nextTension - downRate * dt);
+      } else if (cls === 'wrong') {
+        nextTension = Math.min(100, nextTension + upRate * wrongPenalty * dt);
+      } else {
+        nextTension = Math.min(100, nextTension + upRate * dt);
+      }
       tensionRef.current = nextTension;
       // Direct DOM update bypasses React's batching so the gauge tracks each
       // RAF tick exactly. State syncing (for tension-level transitions) is
@@ -173,12 +192,14 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
         setTension(nextTension);
       }
 
-      // Catch progress — fills while pulling. Drains slowly when idle. During
-      // tugs progress is choked to ~30% of normal (fish thrashes back).
+      // Catch progress — fills only when pulling OPPOSITE to fish.
+      // Wrong direction = penalty drain. Idle = mild drain. Tug throttles fill.
       let nextCatch = catchProgressRef.current;
       if (pullingNow) {
         const fillMult = tugActive ? 0.3 : 1;
         nextCatch += cfg.staminaUpPerSec * dt * fillMult;
+      } else if (cls === 'wrong') {
+        nextCatch -= cfg.staminaDownPerSec * dt * 2.5; // heavy penalty for wrong direction
       } else {
         nextCatch -= cfg.staminaDownPerSec * dt;
       }
@@ -250,6 +271,18 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
           ? <FishSilhouette grade={grade} species={species} direction={fishDir} flashOnHit={flashHit} />
           : <FishSilhouette grade={grade} direction={fishDir} flashOnHit={flashHit} />
         }
+
+        {/* Direction guide — big arrow points the way the player must drag */}
+        <div
+          className={styles.fight__guide}
+          data-dir={fishDir === 1 ? 'left' : 'right'}
+          aria-hidden
+        >
+          <span className={styles.fight__guideArrow}>
+            {fishDir === 1 ? '←' : '→'}
+          </span>
+          <span className={styles.fight__guideLabel}>이쪽으로 끌어!</span>
+        </div>
       </div>
 
       <div className={styles.fight__middle}>
@@ -260,8 +293,14 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       <div className={styles.fight__bottom}>
         <Joystick onChange={handleJoystick} />
         <p className={styles.fight__hint} data-pulling={pulling ? 'yes' : 'no'}>
-          {pulling ? '🔥 당기는 중!' : tugging ? '버텨!' : '조이스틱 끌어!'}
+          {pulling ? '🔥 당기는 중!' : tugging ? '버텨!' : '물고기 반대쪽으로!'}
         </p>
+      </div>
+
+      {/* Decorative water-bubble particles to fill the otherwise plain frame */}
+      <div className={styles.fight__bubbles} aria-hidden>
+        <span data-i="1" /><span data-i="2" /><span data-i="3" />
+        <span data-i="4" /><span data-i="5" /><span data-i="6" />
       </div>
     </div>
   );
