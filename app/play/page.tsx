@@ -30,6 +30,7 @@ import {
   type FishParentMessage,
 } from 'lib/postMessage';
 import { PROGRESS_TARGET, TICKETS_PER_DAY } from 'lib/gameState';
+import { useDailyResetSync } from 'lib/useDailyResetSync';
 import { TicketProgress } from 'components/TicketProgress';
 import type { FishGrade, FishSpecies } from 'lib/types';
 import styles from './page.module.scss';
@@ -50,7 +51,6 @@ export default function PlayPage() {
   const registerPlayer = useGameStore((s) => s.registerPlayer);
   const bumpProgress = useGameStore((s) => s.bumpProgress);
   const registerTicketClaimed = useGameStore((s) => s.registerTicketClaimed);
-  const syncDailyState = useGameStore((s) => s.syncDailyState);
   const progressScore = useGameStore((s) => s.progressScore);
   const ticketsClaimedToday = useGameStore((s) => s.ticketsClaimedToday);
 
@@ -65,11 +65,12 @@ export default function PlayPage() {
   const chamjilTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [mounted, setMounted] = useState(false);
 
+  useDailyResetSync();
+
   useEffect(() => {
     setMounted(true);
-    syncDailyState(todayString());
     sendReady();
-  }, [syncDailyState]);
+  }, []);
 
   useEffect(() => {
     const cleanup = onMessage((msg: FishParentMessage) => {

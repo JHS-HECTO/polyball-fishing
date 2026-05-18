@@ -10,7 +10,7 @@ import {
   PROGRESS_TARGET,
   TICKETS_PER_DAY,
 } from 'lib/gameState';
-import { todayString } from 'lib/dailyCounter';
+import { useDailyResetSync } from 'lib/useDailyResetSync';
 import {
   onMessage,
   sendClaimTicket,
@@ -30,7 +30,6 @@ export default function TitlePage() {
   const progressScore = useGameStore((s) => s.progressScore);
   const ticketsClaimedToday = useGameStore((s) => s.ticketsClaimedToday);
   const registerTicketClaimed = useGameStore((s) => s.registerTicketClaimed);
-  const syncDailyState = useGameStore((s) => s.syncDailyState);
   const registerPlayer = useGameStore((s) => s.registerPlayer);
 
   const [mounted, setMounted] = useState(false);
@@ -38,11 +37,13 @@ export default function TitlePage() {
   const claimTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const pendingAdRef = useRef(false); // true while we wait for the ad to finish
 
+  // Polls + listens for midnight crossings — resets ticket counter & progress.
+  useDailyResetSync();
+
   useEffect(() => {
     setMounted(true);
-    syncDailyState(todayString());
     sendReady();
-  }, [syncDailyState]);
+  }, []);
 
   useEffect(() => {
     const cleanup = onMessage((msg: FishParentMessage) => {
