@@ -50,9 +50,6 @@ export default function TitlePage() {
       {/* Bottom action zone */}
       <div className={styles.title__bottomFade} aria-hidden />
       <div className={styles.title__content}>
-        <div className={styles.title__brandRow}>
-          <span className={styles.title__brandTag}>POLYBALL · LAB</span>
-        </div>
         <h1 className={styles.title__heading}>
           <span className={styles.title__headingTop}>응모권</span>
           <span className={styles.title__headingBig}>낚시하기</span>
