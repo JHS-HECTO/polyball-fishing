@@ -72,7 +72,7 @@ export function TicketProgress({
         disabled={!canClaim}
       >
         {exhausted
-          ? '오늘 보상 마감'
+          ? '황금 물고기를 노려보세요'
           : canClaim && needsAd
             ? '광고 보고 응모권 받기'
             : '응모권 받기'}
