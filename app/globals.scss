@@ -21,25 +21,33 @@ body {
   min-height: 100vh;
   min-height: 100dvh;
   display: flex;
+  align-items: center;
   justify-content: center;
 }
 
-// Phone-shaped frame. Constrains layout to mobile width even on desktop.
-// `contain: layout style` makes `position: fixed` descendants relative to this frame,
-// so modals don't escape into the dark letterbox area.
+// Phone-shaped frame.
+// On a phone the viewport already matches a phone aspect (≈9:19.5) so the
+// frame fills 100vw × 100dvh. On a desktop or wide window we keep the same
+// aspect by deriving the width from the available height — so the preview
+// scales up beyond 480px but never goes wider than its 9:19.5 phone shape.
 .appFrame {
   position: relative;
-  width: 100%;
-  max-width: 48rem; // ~480px = typical phone width upper bound
-  min-height: 100vh;
-  min-height: 100dvh;
+  // width chosen as min(viewport-width, height-derived-width-at-phone-aspect)
+  width: min(100vw, calc(100dvh * 9 / 19.5));
+  aspect-ratio: 9 / 19.5;
+  max-height: 100dvh;
   background: var(--colors-bg);
   overflow: hidden;
-  // `contain: paint` establishes a containing block so descendants with
-  // `position: fixed` (modals, fight overlay) stay inside the phone frame
-  // instead of escaping into the desktop letterbox area.
+  // `contain: paint` establishes a containing block so `position: fixed`
+  // descendants (modals, fight overlay) stay inside the phone frame.
   contain: layout paint style;
-  box-shadow: 0 0 4rem rgba(0, 0, 0, 0.35);
+  box-shadow: 0 0 4rem rgba(0, 0, 0, 0.45);
+
+  // iOS Safari / older browsers without dvh support — fall back to vh.
+  @supports not (height: 100dvh) {
+    width: min(100vw, calc(100vh * 9 / 19.5));
+    max-height: 100vh;
+  }
 }
 
 button {
