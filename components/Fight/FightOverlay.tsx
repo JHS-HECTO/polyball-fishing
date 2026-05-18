@@ -22,20 +22,20 @@ type Props = {
 // fish wins when tension reaches 100. Fish direction changes randomly and
 // occasional "tug" events spike tension.
 const DIR_CHANGE_RANGE_MS: Record<FishGrade, [number, number]> = {
-  trash:  [900, 1300],
-  normal: [750, 1200],
-  rare:   [600, 1000],
-  big:    [500, 900],
-  golden: [400, 800],
+  trash:  [1100, 1600],
+  normal: [950, 1500],
+  rare:   [800, 1300],
+  big:    [700, 1100],
+  golden: [550, 950],
 };
 
 // Tug events — fish makes a sudden hard pull. More for bigger fish.
 const TUG_RANGE_MS: Record<FishGrade, [number, number]> = {
-  trash:  [9000, 12000],   // basically none
-  normal: [4000, 6500],
-  rare:   [2500, 4500],
-  big:    [2000, 3500],
-  golden: [1300, 2800],
+  trash:  [12000, 15000],  // basically none
+  normal: [5500, 8000],
+  rare:   [3500, 5500],
+  big:    [2800, 4500],
+  golden: [1800, 3500],
 };
 const TUG_DURATION_MS = 700;
 const TUG_TENSION_RATE_MULT = 2.6;
@@ -167,7 +167,7 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       // pull penalizes hard. Tug events further boost the climb rate.
       const upRate = cfg.tensionUpPerSec * (tugActive ? TUG_TENSION_RATE_MULT : 1);
       const downRate = cfg.tensionDownPerSec * (tugActive ? 0.5 : 1);
-      const wrongPenalty = 1.8;
+      const wrongPenalty = 1.3;
       let nextTension = tensionRef.current;
       if (cls === 'correct') {
         nextTension = Math.max(0, nextTension - downRate * dt);
@@ -199,7 +199,7 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
         const fillMult = tugActive ? 0.3 : 1;
         nextCatch += cfg.staminaUpPerSec * dt * fillMult;
       } else if (cls === 'wrong') {
-        nextCatch -= cfg.staminaDownPerSec * dt * 2.5; // heavy penalty for wrong direction
+        nextCatch -= cfg.staminaDownPerSec * dt * 1.5;
       } else {
         nextCatch -= cfg.staminaDownPerSec * dt;
       }

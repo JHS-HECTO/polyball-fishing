@@ -40,7 +40,7 @@ type Phase = 'idle' | 'casting' | 'waiting' | 'bite' | 'fight' | 'catchAnim' | '
 const CAST_ANIMATION_MS = 800;
 // Hook-set ("챔질") timing window. Player must tap during this window after
 // the bobber dips. Too late → fish escapes.
-const CHAMJIL_WINDOW_MS = 1400;
+const CHAMJIL_WINDOW_MS = 1700;
 
 export default function PlayPage() {
   const player = useGameStore((s) => s.player);
