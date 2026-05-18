@@ -66,14 +66,20 @@ function handleOutgoing(raw: unknown): void {
       post({ type: 'FISH:AD_COMPLETED' }, 1500);
       break;
 
-    case 'FISH:PLAY_AD_REWARDED':
+    case 'FISH:PLAY_AD_REWARDED': {
       // Rewarded — simulate the user fully watching the ad.
-      post({ type: 'FISH:AD_REWARDED_COMPLETED', reason: msg.reason }, 1500);
+      const reply: FishMsg = { type: 'FISH:AD_REWARDED_COMPLETED' };
+      if (msg.reason) reply.reason = msg.reason;
+      post(reply, 1500);
       break;
+    }
 
-    case 'FISH:CLAIM_TICKET':
-      post({ type: 'FISH:TICKET_GRANTED', count: 1, source: msg.source }, 300);
+    case 'FISH:CLAIM_TICKET': {
+      const reply: FishMsg = { type: 'FISH:TICKET_GRANTED', count: 1 };
+      if (msg.source) reply.source = msg.source;
+      post(reply, 300);
       break;
+    }
 
     case 'FISH:TICKET_REWARD':
       // Legacy auto-reward flow (still emitted for golden when ad gating off)
