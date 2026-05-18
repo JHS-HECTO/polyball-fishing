@@ -62,7 +62,7 @@ export function GoldenRewardModal({ mode, count = 1, onWatchAd, onDecline, onClo
             <h3 className={styles.reward__title}>응모권 {count}장 획득!</h3>
             <p className={styles.reward__subtitle}>황금물고기가 응모권을 물고 있었어요</p>
             <button className={styles.reward__cta} onClick={onClose}>
-              좋아요!
+              확인
             </button>
           </>
         )}
