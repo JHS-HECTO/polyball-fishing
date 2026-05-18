@@ -133,23 +133,9 @@ export default function TitlePage() {
           <span className={styles.title__headingTop}>응모권</span>
           <span className={styles.title__headingBig}>낚시하기</span>
         </h1>
-
-        <div className={styles.title__rewardChips}>
-          <div className={styles.title__chip} data-kind="daily">
-            <span className={styles.title__chipBadge}>1日</span>
-            <span className={styles.title__chipText}>
-              <strong>응모권 3장</strong>
-              <small>점수 채우면 받기</small>
-            </span>
-          </div>
-          <div className={styles.title__chip} data-kind="golden">
-            <span className={styles.title__chipBadge}>+∞</span>
-            <span className={styles.title__chipText}>
-              <strong>황금물고기 = +1장</strong>
-              <small>잡을 때마다 무제한</small>
-            </span>
-          </div>
-        </div>
+        <p className={styles.title__subtitle}>
+          황금물고기 잡을 때마다 <b>응모권 +1장</b>
+        </p>
 
         <TicketProgress
           current={currentPts}
