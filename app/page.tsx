@@ -11,6 +11,7 @@ import {
   TICKETS_PER_DAY,
 } from 'lib/gameState';
 import { useDailyResetSync } from 'lib/useDailyResetSync';
+import { installDevMockParent } from 'lib/devMockParent';
 import {
   onMessage,
   sendClaimTicket,
@@ -45,6 +46,7 @@ export default function TitlePage() {
 
   useEffect(() => {
     setMounted(true);
+    installDevMockParent();
     sendReady();
   }, []);
 

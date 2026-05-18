@@ -31,6 +31,7 @@ import {
 } from 'lib/postMessage';
 import { PROGRESS_TARGET, TICKETS_PER_DAY } from 'lib/gameState';
 import { useDailyResetSync } from 'lib/useDailyResetSync';
+import { installDevMockParent } from 'lib/devMockParent';
 import { TicketProgress } from 'components/TicketProgress';
 import { TicketClaimedModal } from 'components/TicketClaimedModal';
 import type { FishGrade, FishSpecies } from 'lib/types';
@@ -80,6 +81,7 @@ export default function PlayPage() {
 
   useEffect(() => {
     setMounted(true);
+    installDevMockParent();
     sendReady();
   }, []);
 
