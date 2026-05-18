@@ -138,6 +138,12 @@
     opacity: 0.9;
     font-weight: 700;
     text-shadow: 0 0.2rem 0.4rem rgba(0, 0, 0, 0.35);
+    transition: color 120ms, transform 120ms;
+
+    &[data-pulling='yes'] {
+      color: #FFD93D;
+      transform: scale(1.08);
+    }
   }
 }
 

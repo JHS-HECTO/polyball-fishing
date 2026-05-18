@@ -169,7 +169,7 @@ export default function PlayPage() {
     : phase === 'bite' ? 'bite'
     : phase === 'fight' || phase === 'catchAnim' || phase === 'result' || phase === 'reward' || phase === 'ad' ? 'sunken'
     : 'hidden';
-  const showLine = phase === 'waiting' || phase === 'bite';
+  const showLine = phase === 'casting' || phase === 'waiting' || phase === 'bite';
 
   if (!mounted) return null;
 

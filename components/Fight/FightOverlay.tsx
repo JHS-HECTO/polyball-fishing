@@ -61,6 +61,7 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
   const [fishDir, setFishDir] = useState<-1 | 1>(() => pickFishDirection());
   const [flashHit, setFlashHit] = useState(false);
   const [tugging, setTugging] = useState(false);
+  const [pulling, setPulling] = useState(false);
 
   // Refs — RAF tick reads these without re-creating the effect.
   const tensionRef = useRef(0);
@@ -132,14 +133,16 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       // Simple pull mechanic — any joystick deflection counts as pulling.
       // Deadzone is intentionally tiny so a small tug already registers.
       const jMag = Math.hypot(joystick.current.x, joystick.current.y);
-      const pulling = jMag > 0.05;
-      const cls: InputDirection = pulling ? 'correct' : 'none';
+      const pullingNow = jMag > 0.05;
+      const cls: InputDirection = pullingNow ? 'correct' : 'none';
       if (cls !== lastInputClassRef.current) {
         if (cls === 'correct') {
           setFlashHit(true);
           setTimeout(() => setFlashHit(false), 120);
+          setPulling(true);
           startRumble();
         } else {
+          setPulling(false);
           stopRumble();
         }
         lastInputClassRef.current = cls;
@@ -155,7 +158,7 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       // Catch progress — fills while pulling. Drains slowly when idle. During
       // tugs progress is choked to ~30% of normal (fish thrashes back).
       let nextCatch = catchProgressRef.current;
-      if (pulling) {
+      if (pullingNow) {
         const fillMult = tugActive ? 0.3 : 1;
         nextCatch += cfg.staminaUpPerSec * dt * fillMult;
       } else {
@@ -234,8 +237,8 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
 
       <div className={styles.fight__bottom}>
         <Joystick onChange={handleJoystick} />
-        <p className={styles.fight__hint}>
-          {tugging ? '버텨!' : tensionLevel === 'critical' ? '계속!' : '조이스틱 끌어!'}
+        <p className={styles.fight__hint} data-pulling={pulling ? 'yes' : 'no'}>
+          {pulling ? '🔥 당기는 중!' : tugging ? '버텨!' : '조이스틱 끌어!'}
         </p>
       </div>
     </div>
