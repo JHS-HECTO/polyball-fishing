@@ -42,6 +42,14 @@ const CAST_ANIMATION_MS = 800;
 // Hook-set ("챔질") timing window. Player must tap during this window after
 // the bobber dips. Too late → fish escapes.
 const CHAMJIL_WINDOW_MS = 1700;
+// TEMP debug flag — when true, every cast rolls only big/golden grades so we
+// can rapidly QA high-tier fights. Flip back to false before launch.
+const FORCE_HIGH_GRADE = true;
+
+function rollHighGrade(): FishGrade {
+  // ~25% golden, 75% big
+  return Math.random() < 0.25 ? 'golden' : 'big';
+}
 
 export default function PlayPage() {
   const player = useGameStore((s) => s.player);
@@ -162,7 +170,7 @@ export default function PlayPage() {
     if (chamjilTimer.current) clearTimeout(chamjilTimer.current);
     chamjilTimer.current = null;
     vibrate('goodHit');
-    const g = rollGrade();
+    const g = FORCE_HIGH_GRADE ? rollHighGrade() : rollGrade();
     const s = pickSpecies(g);
     setGrade(g);
     setSpecies(s);
