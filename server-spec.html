@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>응모권 낚시하기 — 서버 기획서</title>
+<style>
+  :root {
+    --ink: #1D3557;
+    --soft: #6B7B8A;
+    --line: #d1d8df;
+    --accent: #FFD93D;
+    --blue: #2F6A88;
+    --bg: #f8f9fb;
+    --white: #ffffff;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 32px 24px;
+    font-family: 'Pretendard', system-ui, -apple-system, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; }
+  header {
+    border-bottom: 4px solid var(--blue);
+    padding-bottom: 16px;
+    margin-bottom: 32px;
+  }
+  h1 { font-size: 28px; margin: 0 0 6px; font-weight: 900; }
+  .meta { color: var(--soft); font-size: 13px; }
+  .meta a { color: var(--blue); font-weight: 700; }
+  h2 {
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--blue);
+    margin: 32px 0 12px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--line);
+  }
+  h3 { font-size: 15px; font-weight: 800; margin: 18px 0 6px; }
+  p { margin: 0 0 10px; }
+  code, pre {
+    font-family: 'JetBrains Mono', Consolas, monospace;
+    font-size: 12.5px;
+  }
+  pre {
+    background: #0f1e32;
+    color: #d9e4f0;
+    padding: 12px 14px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 8px 0 14px;
+  }
+  code {
+    background: rgba(0,0,0,0.06);
+    padding: 1px 6px;
+    border-radius: 4px;
+    color: #B81E2A;
+  }
+  pre code { background: none; padding: 0; color: inherit; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8px 0 16px;
+    font-size: 13.5px;
+    background: var(--white);
+  }
+  th, td {
+    border: 1px solid var(--line);
+    padding: 8px 10px;
+    text-align: left;
+    vertical-align: top;
+  }
+  th { background: #eef2f6; font-weight: 800; }
+  td:first-child { font-weight: 700; white-space: nowrap; color: var(--blue); }
+  ul { padding-left: 22px; margin: 6px 0 14px; }
+  li { margin: 3px 0; }
+  .callout {
+    padding: 12px 14px;
+    border-radius: 8px;
+    margin: 14px 0;
+    border-left: 4px solid var(--accent);
+    background: #fffaeb;
+  }
+  .callout strong { display: block; margin-bottom: 4px; font-weight: 800; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  @media (max-width: 640px) { .grid2 { grid-template-columns: 1fr; } }
+  .badge {
+    display: inline-block;
+    padding: 2px 8px;
+    background: var(--accent);
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 800;
+    color: var(--ink);
+    margin-left: 4px;
+  }
+  .badge-blue { background: var(--blue); color: var(--white); }
+  footer {
+    margin-top: 48px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    font-size: 12px;
+    color: var(--soft);
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <h1>🎣 응모권 낚시하기 — 서버 기획서</h1>
+  <div class="meta">
+    인계용 한 장 요약 · 게임 측 코드 완료 · 폴리볼 측 작업 항목 정리<br>
+    <a href="https://github.com/JHS-HECTO/polyball-fishing">GitHub</a> ·
+    <a href="https://polyball-fishing.vercel.app">라이브 데모</a> ·
+    상세 명세는 <code>INTEGRATION.md</code>
+  </div>
+</header>
+
+<h2>1. 개요</h2>
+<p>폴리볼 실험실 미니게임. iframe 임베드 + <code>postMessage</code> 통신. 게임 측은 유저를 식별하지 않으며 응모권 cap, 광고 SDK, 점수 누적은 폴리볼이 권위로 처리.</p>
+
+<div class="grid2">
+  <div>
+    <h3>일일 응모권 cap</h3>
+    <ul>
+      <li>하루 <strong>최대 3장</strong></li>
+      <li>게이지 채워 받기: 1번째 무료 / 2~3번째 광고</li>
+      <li>황금물고기 추가: 광고 시청시 1장 (cap 내 포함)</li>
+      <li>자정 자동 리셋</li>
+    </ul>
+  </div>
+  <div>
+    <h3>광고 종류</h3>
+    <ul>
+      <li><strong>보상형(rewarded)</strong> 만 사용</li>
+      <li>인터스티셜 / 자동 광고 없음</li>
+      <li>사용자가 명시적으로 요청한 시점에만 호출</li>
+    </ul>
+  </div>
+</div>
+
+<h2>2. 메시지 프로토콜 요약</h2>
+<table>
+  <thead><tr><th>방향</th><th>type</th><th>payload</th><th>의미</th></tr></thead>
+  <tbody>
+    <tr><td>→ 부모</td><td><code>FISH:READY</code></td><td>(없음)</td><td>게임 마운트 완료</td></tr>
+    <tr><td>→ 부모</td><td><code>FISH:CLAIM_TICKET</code></td><td><code>source</code>, <code>adWatched</code></td><td>응모권 적립 요청</td></tr>
+    <tr><td>→ 부모</td><td><code>FISH:PLAY_AD_REWARDED</code></td><td><code>reason: 'progress' | 'golden'</code></td><td>보상형 광고 요청</td></tr>
+    <tr><td>→ 부모</td><td><code>FISH:SCORE_UPDATE</code></td><td><code>total_score</code></td><td>점수 갱신 (선택)</td></tr>
+    <tr><td>← 부모</td><td><code>FISH:SET_PLAYER</code></td><td><code>player</code>, <code>total_score</code></td><td>플레이어 정보 주입</td></tr>
+    <tr><td>← 부모</td><td><code>FISH:AD_REWARDED_COMPLETED</code></td><td><code>reason</code></td><td>광고 시청 완료</td></tr>
+    <tr><td>← 부모</td><td><code>FISH:AD_REWARDED_FAILED</code></td><td><code>reason</code>, <code>cause</code></td><td>광고 실패/스킵</td></tr>
+    <tr><td>← 부모</td><td><code>FISH:TICKET_GRANTED</code></td><td><code>count</code>, <code>source</code></td><td>적립 성공</td></tr>
+    <tr><td>← 부모</td><td><code>FISH:TICKET_REJECTED</code></td><td><code>reason</code></td><td>cap 초과 / 광고 미시청 등</td></tr>
+  </tbody>
+</table>
+
+<h2>3. 클레임 cap 로직 (의사 코드)</h2>
+<pre><code>function handleClaimTicket(userId, source, adWatched) {
+  const daily = db.get('fishing_tickets_daily', userId, today());
+  const ticketsToday = daily?.tickets_today ?? 0;
+
+  if (ticketsToday >= 3)
+    return { type: 'FISH:TICKET_REJECTED', reason: 'daily_cap_reached' };
+
+  // progress 1번째만 광고 면제, 2~3번째 + golden은 광고 필수
+  if (source === 'progress' && ticketsToday >= 1 && !adWatched)
+    return { type: 'FISH:TICKET_REJECTED', reason: 'ad_required' };
+  if (source === 'golden' && !adWatched)
+    return { type: 'FISH:TICKET_REJECTED', reason: 'ad_required' };
+
+  db.incr('fishing_tickets_daily', userId, today(), { tickets_today: 1 });
+  grantTicket(userId, 1);
+  return { type: 'FISH:TICKET_GRANTED', count: 1, source };
+}</code></pre>
+
+<h2>4. DB 권장 스키마</h2>
+<pre><code>CREATE TABLE fishing_tickets_daily (
+  user_id          BIGINT,
+  date             DATE,
+  tickets_today    INT NOT NULL DEFAULT 0,  -- 0~3
+  golden_caught    INT NOT NULL DEFAULT 0,  -- 통계용
+  progress_claimed INT NOT NULL DEFAULT 0,  -- 통계용
+  PRIMARY KEY (user_id, date)
+);
+
+CREATE TABLE fishing_scores (
+  user_id     BIGINT PRIMARY KEY,
+  total_score BIGINT NOT NULL DEFAULT 0,
+  updated_at  TIMESTAMP NOT NULL DEFAULT NOW()
+);</code></pre>
+<p>자정 리셋은 <code>date</code> 키로 자연 처리. 별도 cron 불필요.</p>
+
+<h2>5. 표준 흐름 시나리오</h2>
+<div class="grid2">
+  <div>
+    <h3><span class="badge">1번째</span> 무료 클레임</h3>
+    <ol>
+      <li>게이지 2000점 채움</li>
+      <li>사용자 "응모권 받기" 탭</li>
+      <li>게임 → <code>CLAIM_TICKET { source: 'progress', adWatched: false }</code></li>
+      <li>서버 cap 검증 → <code>TICKET_GRANTED</code></li>
+      <li>게임: 응모권 지급 완료 팝업</li>
+    </ol>
+  </div>
+  <div>
+    <h3><span class="badge badge-blue">2~3번째</span> 광고 후 클레임</h3>
+    <ol>
+      <li>게이지 다시 2000점 채움</li>
+      <li>사용자 "광고 보고 응모권 받기" 탭</li>
+      <li>게임 → <code>PLAY_AD_REWARDED { reason: 'progress' }</code></li>
+      <li>폴리볼 광고 SDK → 광고 끝나면 <code>AD_REWARDED_COMPLETED</code></li>
+      <li>게임 자동 → <code>CLAIM_TICKET { source: 'progress', adWatched: true }</code></li>
+      <li>서버 → <code>TICKET_GRANTED</code></li>
+    </ol>
+  </div>
+  <div>
+    <h3>황금물고기 잡힘</h3>
+    <ol>
+      <li>잡힘 → 광고 권유 모달</li>
+      <li>"광고 보고 응모권 받기" 탭</li>
+      <li><code>PLAY_AD_REWARDED { reason: 'golden' }</code> → 광고 → <code>AD_REWARDED_COMPLETED</code></li>
+      <li>게임 → <code>CLAIM_TICKET { source: 'golden', adWatched: true }</code></li>
+      <li>서버 cap 검증 → <code>TICKET_GRANTED</code> 또는 <code>REJECTED</code> (cap 초과)</li>
+    </ol>
+  </div>
+  <div>
+    <h3>자정 리셋</h3>
+    <ol>
+      <li>날짜 변경 감지 (게임 1분 폴링 + focus 이벤트)</li>
+      <li>게임 측 카운터/게이지 자동 0</li>
+      <li>서버는 <code>date</code> 키로 자연 분리</li>
+    </ol>
+  </div>
+</div>
+
+<h2>6. 통합 체크리스트</h2>
+<ul>
+  <li>iframe 임베드 (실험실 메뉴 진입점)</li>
+  <li><code>FISH:READY</code> → <code>SET_PLAYER</code> 자동 응답 (현재 로그인 유저 닉/팀/누적점수)</li>
+  <li><code>FISH:PLAY_AD_REWARDED</code> 핸들러 + 광고 SDK 호출 + 완료/실패 회신</li>
+  <li><code>FISH:CLAIM_TICKET</code> 핸들러 + cap 검증 + DB 적립 + GRANTED/REJECTED 회신</li>
+  <li><code>FISH:SCORE_UPDATE</code> 핸들러 + 점수 누적 (선택)</li>
+  <li>PIPA 동의 (앱 진입 단계, 게임 내부 X)</li>
+  <li>만 14세 미만 처리 (정책팀 협의)</li>
+</ul>
+
+<div class="callout">
+  <strong>주의</strong>
+  게임은 <code>CLAIM_TICKET</code> / <code>PLAY_AD_REWARDED</code> 송신 후 1.5초 응답 없으면 UI 잠금 해제. 폴리볼 측은 가급적 1초 이내 응답 권장. 실패 케이스는 반드시 <code>REJECTED</code> 또는 <code>AD_REWARDED_FAILED</code> 명시.
+</div>
+
+<footer>
+  응모권 낚시하기 v1 · 게임 측 구현 완료 · 본 문서는 폴리볼 백엔드/통합 개발자용 한 장 요약입니다. 전체 명세는 저장소의 <code>INTEGRATION.md</code> 참고.
+</footer>
+
+</div>
+</body>
+</html>
