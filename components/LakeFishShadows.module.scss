@@ -1,0 +1,123 @@
+// Fish shadow silhouettes drifting in the lake region. Pure CSS — no images,
+// no JS animation runtime cost. Each shadow has its own swim path so they
+// never sync up visually.
+.shadows {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.shadow {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(20, 45, 75, 0.55) 0%,
+    rgba(20, 45, 75, 0.35) 45%,
+    transparent 75%
+  );
+  filter: blur(0.15rem);
+  will-change: transform;
+
+  // Small wiggling tail extension — uses ::after to fake a tail without
+  // needing a separate sprite.
+  &::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -1rem;
+    width: 1.4rem;
+    height: 0.5rem;
+    background: radial-gradient(ellipse at left, rgba(20, 45, 75, 0.45), transparent 75%);
+    transform: translateY(-50%);
+    animation: tailFlick 0.5s ease-in-out infinite alternate;
+  }
+
+  // Five distinct fish: different size, depth (opacity), vertical band,
+  // duration. The translate path runs left → right → flips with scaleX and
+  // returns, so each fish 'turns around' naturally instead of teleporting.
+
+  &[data-fish='1'] {
+    top: 32vh;
+    width: 4rem;
+    height: 1.5rem;
+    opacity: 0.9;
+    animation: swim1 22s linear infinite;
+  }
+  &[data-fish='2'] {
+    top: 42vh;
+    width: 2.8rem;
+    height: 1.1rem;
+    opacity: 0.75;
+    animation: swim2 17s linear infinite;
+    &::after { animation-duration: 0.4s; }
+  }
+  &[data-fish='3'] {
+    top: 52vh;
+    width: 5.2rem;
+    height: 1.8rem;
+    opacity: 1;
+    animation: swim3 28s linear infinite;
+    &::after { animation-duration: 0.6s; }
+  }
+  &[data-fish='4'] {
+    top: 58vh;
+    width: 3.2rem;
+    height: 1.2rem;
+    opacity: 0.7;
+    animation: swim4 19s linear infinite;
+  }
+  &[data-fish='5'] {
+    top: 36vh;
+    width: 3.6rem;
+    height: 1.3rem;
+    opacity: 0.8;
+    animation: swim5 24s linear infinite;
+    &::after { animation-duration: 0.45s; }
+  }
+}
+
+@keyframes tailFlick {
+  from { transform: translateY(-50%) rotate(-12deg); }
+  to   { transform: translateY(-50%) rotate(12deg); }
+}
+
+// Each swim keyframe: drift across, briefly pause at edge with scaleX flip,
+// drift back. Slight vertical wander on the way for natural feel.
+@keyframes swim1 {
+  0%   { transform: translate(-20vw, 0)     scaleX(1); }
+  46%  { transform: translate(100vw, -2vh)  scaleX(1); }
+  50%  { transform: translate(100vw, -2vh)  scaleX(-1); }
+  96%  { transform: translate(-20vw, 1vh)   scaleX(-1); }
+  100% { transform: translate(-20vw, 0)     scaleX(1); }
+}
+@keyframes swim2 {
+  0%   { transform: translate(110vw, 0)    scaleX(-1); }
+  46%  { transform: translate(-15vw, 2vh)  scaleX(-1); }
+  50%  { transform: translate(-15vw, 2vh)  scaleX(1); }
+  96%  { transform: translate(110vw, -1vh) scaleX(1); }
+  100% { transform: translate(110vw, 0)    scaleX(-1); }
+}
+@keyframes swim3 {
+  0%   { transform: translate(-25vw, 1vh)  scaleX(1); }
+  48%  { transform: translate(110vw, -1vh) scaleX(1); }
+  52%  { transform: translate(110vw, -1vh) scaleX(-1); }
+  98%  { transform: translate(-25vw, 0)    scaleX(-1); }
+  100% { transform: translate(-25vw, 1vh)  scaleX(1); }
+}
+@keyframes swim4 {
+  0%   { transform: translate(110vw, 0)    scaleX(-1); }
+  45%  { transform: translate(-20vw, -2vh) scaleX(-1); }
+  50%  { transform: translate(-20vw, -2vh) scaleX(1); }
+  95%  { transform: translate(110vw, 1vh)  scaleX(1); }
+  100% { transform: translate(110vw, 0)    scaleX(-1); }
+}
+@keyframes swim5 {
+  0%   { transform: translate(-25vw, 0)    scaleX(1); }
+  47%  { transform: translate(110vw, 2vh)  scaleX(1); }
+  51%  { transform: translate(110vw, 2vh)  scaleX(-1); }
+  97%  { transform: translate(-25vw, -1vh) scaleX(-1); }
+  100% { transform: translate(-25vw, 0)    scaleX(1); }
+}
