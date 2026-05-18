@@ -45,7 +45,7 @@ const CAST_ANIMATION_MS = 800;
 const CHAMJIL_WINDOW_MS = 1700;
 // TEMP debug flag — when true, every cast rolls only big/golden grades so we
 // can rapidly QA high-tier fights. Flip back to false before launch.
-const FORCE_HIGH_GRADE = true;
+const FORCE_HIGH_GRADE = false;
 
 function rollHighGrade(): FishGrade {
   // QA: golden every cast
