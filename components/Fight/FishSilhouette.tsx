@@ -34,11 +34,15 @@ export function FishSilhouette({ grade, species, direction, flashOnHit = false }
       style={{ width: `${size}rem`, height: `${size}rem` }}
       animate={{
         x: `${targetX}rem`,
+        y: [0, -2, 0, 2, 0],
+        rotate: [direction * -3, direction * 3, direction * -3],
         scale: flashOnHit ? [1, 0.92, 1.06, 1] : 1,
       }}
       transition={{
-        x: { duration: 1.0, ease: 'easeInOut' },
-        scale: { duration: 0.25 },
+        x:      { duration: 1.0, ease: 'easeInOut' },
+        y:      { duration: 1.4, repeat: Infinity, ease: 'easeInOut' },
+        rotate: { duration: 0.6, repeat: Infinity, ease: 'easeInOut' },
+        scale:  { duration: 0.25 },
       }}
     >
       {species && (

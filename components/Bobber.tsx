@@ -33,10 +33,16 @@ const variants = {
   },
   floating: {
     opacity: 1,
-    x: 0,
-    y: [0, -3, 0, 3, 0],
+    x: [0, 1.5, 0, -1.5, 0],
+    y: [0, -4, 0, 3, 0],
+    rotate: [0, 4, 0, -4, 0],
     scale: 1,
-    transition: { y: { duration: 2.4, repeat: Infinity, ease: 'easeInOut' as const }, opacity: { duration: 0.15 } },
+    transition: {
+      y:     { duration: 2.6, repeat: Infinity, ease: 'easeInOut' as const },
+      x:     { duration: 3.1, repeat: Infinity, ease: 'easeInOut' as const },
+      rotate:{ duration: 2.9, repeat: Infinity, ease: 'easeInOut' as const },
+      opacity: { duration: 0.15 },
+    },
   },
   bite: {
     opacity: 1,

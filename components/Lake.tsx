@@ -9,11 +9,16 @@ export function Lake({ children }: { children?: React.ReactNode }) {
       {/* eslint-disable-next-line @next/next/no-img-element */}
       <img src="/images/01-play-bg.png" alt="" className={styles.lake__bg} draggable={false} />
 
-      {/* Animated overlays */}
+      {/* Animated overlays — pure CSS so they cost nothing on mobile */}
+      <div className={styles.lake__cloud1} aria-hidden />
+      <div className={styles.lake__cloud2} aria-hidden />
+      <div className={styles.lake__lightBeam} aria-hidden />
       <div className={styles.lake__sunGlow} aria-hidden />
       <div className={styles.lake__shimmer} aria-hidden />
       <div className={styles.lake__ambientRipple} aria-hidden />
       <div className={styles.lake__ambientRipple2} aria-hidden />
+      <div className={styles.lake__ambientRipple3} aria-hidden />
+      <div className={styles.lake__ambientRipple4} aria-hidden />
 
       {children}
     </div>

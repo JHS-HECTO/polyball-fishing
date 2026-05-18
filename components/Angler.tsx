@@ -23,13 +23,15 @@ export function Angler({ castedRod }: Props) {
         }}
         transition={{ type: 'spring', stiffness: 220, damping: 18 }}
       >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/02-angler.png"
-          alt=""
-          className={styles.angler__img}
-          draggable={false}
-        />
+        <div className={styles.angler__breathe}>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/02-angler.png"
+            alt=""
+            className={styles.angler__img}
+            draggable={false}
+          />
+        </div>
       </MotionDiv>
     </div>
   );

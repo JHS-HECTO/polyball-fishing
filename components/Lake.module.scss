@@ -53,9 +53,12 @@
   }
 
   // Ambient ripples that appear periodically somewhere on the lake to imply
-  // wind/fish. Two staggered rings.
+  // wind/fish. Several at random spots with different periods so they don't
+  // sync (gives an organic, living-water feel).
   &__ambientRipple,
-  &__ambientRipple2 {
+  &__ambientRipple2,
+  &__ambientRipple3,
+  &__ambientRipple4 {
     position: absolute;
     width: 8rem;
     height: 2.4rem;
@@ -65,15 +68,46 @@
     opacity: 0;
     z-index: 2;
   }
-  &__ambientRipple {
-    top: 38vh;
-    left: 18%;
-    animation: ambientRipple 9s ease-out infinite;
+  &__ambientRipple  { top: 38vh; left: 18%; animation: ambientRipple 9s ease-out infinite; }
+  &__ambientRipple2 { top: 55vh; left: 62%; animation: ambientRipple 11s ease-out 3.5s infinite; }
+  &__ambientRipple3 { top: 46vh; left: 78%; animation: ambientRipple 13s ease-out 7s infinite; width: 5rem; height: 1.6rem; }
+  &__ambientRipple4 { top: 60vh; left: 28%; animation: ambientRipple 10s ease-out 5s infinite; width: 6rem; height: 1.8rem; }
+
+  // Slow-drifting cloud overlay across the sky band so the scene reads as
+  // moving even when nothing else is happening. Two layers at different
+  // speeds + positions for parallax.
+  &__cloud1,
+  &__cloud2 {
+    position: absolute;
+    top: 5vh;
+    left: -20%;
+    width: 24rem;
+    height: 6rem;
+    background:
+      radial-gradient(ellipse 8rem 2rem at 20% 50%, rgba(255, 255, 255, 0.55), transparent 70%),
+      radial-gradient(ellipse 10rem 2.4rem at 55% 50%, rgba(255, 255, 255, 0.5), transparent 70%),
+      radial-gradient(ellipse 6rem 1.6rem at 85% 60%, rgba(255, 255, 255, 0.45), transparent 70%);
+    pointer-events: none;
+    z-index: 1;
+    filter: blur(0.2rem);
   }
-  &__ambientRipple2 {
-    top: 55vh;
-    left: 62%;
-    animation: ambientRipple 11s ease-out 3.5s infinite;
+  &__cloud1 { top: 6vh; animation: cloudDrift 90s linear infinite; }
+  &__cloud2 { top: 14vh; animation: cloudDrift 140s linear infinite 30s; opacity: 0.7; transform: scale(0.7); }
+
+  // Subtle light beam through the sky — adds depth.
+  &__lightBeam {
+    position: absolute;
+    top: 0;
+    right: 6vw;
+    width: 18rem;
+    height: 28vh;
+    background: linear-gradient(180deg, rgba(255, 240, 200, 0.25), transparent 100%);
+    pointer-events: none;
+    z-index: 1;
+    transform: rotate(-12deg);
+    transform-origin: top right;
+    animation: lightBeamPulse 7s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
   }
 }
 
@@ -97,4 +131,14 @@
   10%  { opacity: 0.8; transform: scale(0.4); }
   60%  { opacity: 0.3; transform: scale(1.6); }
   100% { opacity: 0;   transform: scale(2.2); }
+}
+
+@keyframes cloudDrift {
+  from { transform: translateX(0); }
+  to   { transform: translateX(140vw); }
+}
+
+@keyframes lightBeamPulse {
+  from { opacity: 0.35; transform: rotate(-14deg); }
+  to   { opacity: 0.65; transform: rotate(-10deg); }
 }

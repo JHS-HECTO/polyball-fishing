@@ -1,6 +1,6 @@
 // Outer .angler handles centering and stacking. Inner .angler__inner is owned
-// by framer-motion (rocks slightly when casting) so we keep transforms on
-// separate elements.
+// by framer-motion (rocks on cast) so we keep transforms on separate
+// elements. The breathing layer adds a subtle always-on idle pulse.
 .angler {
   position: absolute;
   left: 50%;
@@ -19,10 +19,24 @@
   transform-origin: bottom center;
 }
 
+// Subtle breathing animation — barely-noticeable shoulder rise/fall on a slow
+// asymmetric loop so it doesn't sync with other ambient motion.
+.angler__breathe {
+  width: 100%;
+  height: 100%;
+  transform-origin: bottom center;
+  animation: anglerBreathe 4.2s ease-in-out infinite alternate;
+}
+
 .angler__img {
   width: 100%;
   height: 100%;
   object-fit: contain;
   object-position: center bottom;
   user-select: none;
+}
+
+@keyframes anglerBreathe {
+  from { transform: translateY(0) scale(1, 1); }
+  to   { transform: translateY(-0.3rem) scale(1.005, 0.995); }
 }
