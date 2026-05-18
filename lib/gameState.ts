@@ -3,9 +3,8 @@ import { persist } from 'zustand/middleware';
 import type { Player } from './types';
 
 // Score the bar must reach before the player can claim a ticket.
-// Average ~15 pts per cast → ~340 casts (~60 min) for 5000.
-// Lower to ~2000 if you want a shorter cycle (~20 min per ticket).
-export const PROGRESS_TARGET = 5000;
+// Average ~15 pts per cast → ~135 casts (~20 min) per ticket at 2000.
+export const PROGRESS_TARGET = 2000;
 // Max tickets the player can claim per day.
 export const TICKETS_PER_DAY = 3;
 

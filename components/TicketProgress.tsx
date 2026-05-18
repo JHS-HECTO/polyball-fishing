@@ -71,11 +71,9 @@ export function TicketProgress({
       >
         {exhausted
           ? '오늘 보상 마감'
-          : !canClaim
-            ? '점수를 채우세요'
-            : needsAd
-              ? '🎬 광고 보고 응모권 받기'
-              : '🎫 응모권 받기'}
+          : canClaim && needsAd
+            ? '광고 보고 응모권 받기'
+            : '응모권 받기'}
       </button>
     </div>
   );
