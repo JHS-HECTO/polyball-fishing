@@ -238,6 +238,46 @@
   }
 
   // ────────────────────────────────────────────────────────────────────
+  // Joystick frame — wraps the joystick with two side arrows that match
+  // the top guide direction. Only the side matching the current pull
+  // direction lights up; the other dims out.
+  &__joystickFrame {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.4rem;
+  }
+
+  &__sideArrow {
+    font-size: 5rem;
+    line-height: 1;
+    font-weight: 900;
+    color: #FFD93D;
+    text-shadow:
+      0 0 1rem rgba(255, 217, 61, 0.8),
+      0 0.3rem 0 rgba(180, 110, 0, 0.9),
+      0 0.6rem 1.4rem rgba(0, 0, 0, 0.6);
+    opacity: 0.25;
+    transform: scale(0.85);
+    transition: opacity 200ms ease, transform 200ms ease, filter 200ms ease;
+    user-select: none;
+  }
+
+  // Highlight the side opposite to fish direction = the direction the player
+  // must pull. The other arrow dims.
+  &__joystickFrame[data-dir='left']  &__sideArrow--left  {
+    opacity: 1;
+    transform: scale(1.05);
+    animation: sideArrowBounce 0.65s ease-in-out infinite alternate;
+  }
+  &__joystickFrame[data-dir='right'] &__sideArrow--right {
+    opacity: 1;
+    transform: scale(1.05);
+    animation: sideArrowBounceRight 0.65s ease-in-out infinite alternate;
+  }
+
+  // ────────────────────────────────────────────────────────────────────
   // Floating water bubbles — faster & denser than ambient to convey churn.
   &__bubbles {
     position: absolute;
@@ -370,6 +410,16 @@
 @keyframes guideBounce {
   from { transform: scale(0.9) translateY(0);   filter: brightness(0.95); }
   to   { transform: scale(1.15) translateY(-0.4rem); filter: brightness(1.2); }
+}
+
+@keyframes sideArrowBounce {
+  from { transform: scale(1.05) translateX(0);      filter: brightness(0.95); }
+  to   { transform: scale(1.18) translateX(-0.5rem); filter: brightness(1.25); }
+}
+
+@keyframes sideArrowBounceRight {
+  from { transform: scale(1.05) translateX(0);     filter: brightness(0.95); }
+  to   { transform: scale(1.18) translateX(0.5rem); filter: brightness(1.25); }
 }
 
 @keyframes bubbleRise {

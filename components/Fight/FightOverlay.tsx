@@ -298,7 +298,14 @@ export function FightOverlay({ grade, species, onComplete }: Props) {
       </div>
 
       <div className={styles.fight__bottom}>
-        <Joystick onChange={handleJoystick} />
+        {/* Joystick wrapped with side arrows that flank it and point the
+            correct pull direction — same fish-opposite mapping as the top
+            guide so the player sees the cue right next to the input. */}
+        <div className={styles.fight__joystickFrame} data-dir={fishDir === 1 ? 'left' : 'right'}>
+          <span className={`${styles.fight__sideArrow} ${styles['fight__sideArrow--left']}`} aria-hidden>←</span>
+          <Joystick onChange={handleJoystick} />
+          <span className={`${styles.fight__sideArrow} ${styles['fight__sideArrow--right']}`} aria-hidden>→</span>
+        </div>
         <p className={styles.fight__hint} data-pulling={pulling ? 'yes' : 'no'}>
           {pulling ? '🔥 당기는 중!' : tugging ? '버텨!' : '물고기 반대쪽으로!'}
         </p>

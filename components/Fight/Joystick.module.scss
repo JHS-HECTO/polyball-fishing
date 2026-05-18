@@ -1,25 +1,49 @@
+// Joystick — bright, prominent against the dark underwater fight bg.
 .joystick {
   &__base {
     position: relative;
-    width: 16rem;
-    height: 16rem;
+    width: 18rem;
+    height: 18rem;
     border-radius: 50%;
-    background: rgba(69, 123, 157, 0.12);
-    border: 0.3rem dashed rgba(69, 123, 157, 0.4);
+    background:
+      radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.18), rgba(15, 30, 50, 0.55) 80%);
+    border: 0.4rem solid rgba(255, 255, 255, 0.85);
+    box-shadow:
+      0 0 0 0.6rem rgba(15, 30, 50, 0.45),
+      0 0 2.4rem rgba(255, 217, 61, 0.35),
+      inset 0 0 2rem rgba(0, 0, 0, 0.35);
     touch-action: none;
     user-select: none;
     display: flex;
     align-items: center;
     justify-content: center;
+
+    // Cross-hair guides inside the base so the player can see neutral position.
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      background: rgba(255, 255, 255, 0.25);
+      pointer-events: none;
+    }
+    &::before { left: 50%; top: 12%; bottom: 12%; width: 0.15rem; transform: translateX(-50%); }
+    &::after  { top: 50%; left: 12%; right: 12%;  height: 0.15rem; transform: translateY(-50%); }
   }
 
   &__knob {
-    width: 6rem;
-    height: 6rem;
+    width: 8rem;
+    height: 8rem;
     border-radius: 50%;
-    background: radial-gradient(circle at 30% 30%, #FFFFFF, #A8DADC);
-    box-shadow: var(--shadow-md);
+    background:
+      radial-gradient(circle at 30% 28%, #FFFFFF 0%, #FFE680 40%, #E89B00 100%);
+    box-shadow:
+      0 0 0 0.3rem #FFFFFF,
+      0 0 0 0.55rem rgba(232, 155, 0, 0.7),
+      0 0 1.6rem rgba(255, 217, 61, 0.65),
+      0 0.8rem 1.6rem rgba(0, 0, 0, 0.55);
     transition: transform 60ms ease-out;
     pointer-events: none;
+    position: relative;
+    z-index: 2;
   }
 }
