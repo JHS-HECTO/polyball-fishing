@@ -1,0 +1,158 @@
+// Ticket progress widget — shows daily counter, fill bar, claim button.
+.wrap {
+  width: min(34rem, 92%);
+  padding: var(--space-3);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95), rgba(255, 245, 225, 0.95));
+  border-radius: var(--radius-lg);
+  box-shadow:
+    0 0 0 0.3rem rgba(255, 217, 61, 0.55),
+    0 1rem 2rem rgba(0, 0, 0, 0.25);
+  backdrop-filter: blur(0.4rem);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &[data-compact='yes'] {
+    width: min(28rem, 100%);
+    padding: var(--space-2);
+    gap: 0.6rem;
+
+    .head, .bar, .claim {
+      font-size: 1.2rem;
+    }
+
+    .bar { height: 1.4rem; }
+    .barText { font-size: 1rem; }
+    .claim {
+      font-size: 1.2rem;
+      padding: 0.6rem 1.2rem;
+    }
+  }
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  color: #1D3557;
+}
+
+.headLabel {
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #6B7B8A;
+  text-transform: uppercase;
+  font-size: 1rem;
+}
+
+.headCount {
+  font-weight: 800;
+  color: #1D3557;
+  font-size: 1.4rem;
+
+  strong {
+    color: #E89B00;
+    font-size: 1.8rem;
+    margin-right: 0.2rem;
+  }
+}
+
+.bar {
+  position: relative;
+  width: 100%;
+  height: 1.8rem;
+  background: rgba(29, 53, 87, 0.12);
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  box-shadow: inset 0 0.2rem 0.4rem rgba(0, 0, 0, 0.15);
+}
+
+.barFill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  background: linear-gradient(90deg, #6BBE89 0%, #FFD93D 60%, #FFB400 100%);
+  box-shadow: 0 0 1.2rem rgba(255, 217, 61, 0.5);
+  transition: background 200ms;
+
+  &[data-full='yes'] {
+    background: linear-gradient(90deg, #FFD93D 0%, #FFC107 50%, #E89B00 100%);
+    animation: fullPulse 1.2s ease-in-out infinite alternate;
+  }
+}
+
+.barText {
+  position: relative;
+  display: block;
+  text-align: center;
+  font-size: 1.1rem;
+  font-weight: 800;
+  line-height: 1.8rem;
+  color: #1D3557;
+  letter-spacing: -0.01em;
+  z-index: 1;
+  mix-blend-mode: difference;
+  color: #FFFFFF;
+}
+
+.claim {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  padding: var(--space-2) var(--space-4);
+  font-size: 1.6rem;
+  font-weight: 900;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  transition: transform 120ms ease, box-shadow 120ms ease, filter 120ms ease;
+  letter-spacing: -0.01em;
+  color: #1D3557;
+
+  &[data-state='free'] {
+    background: linear-gradient(180deg, #FFE680 0%, #FFCC33 55%, #E89B00 100%);
+    box-shadow:
+      0 0 0 0.25rem #FFFFFF,
+      0 0 0 0.5rem rgba(232, 155, 0, 0.6),
+      0 0.8rem 0 rgba(180, 110, 0, 0.4),
+      0 1rem 2rem rgba(0, 0, 0, 0.35);
+    animation: claimPulse 1.6s ease-in-out infinite alternate;
+  }
+
+  &[data-state='ad'] {
+    background: linear-gradient(180deg, #A8DADC 0%, #5BA0C8 55%, #2F6A88 100%);
+    color: white;
+    box-shadow:
+      0 0 0 0.25rem #FFFFFF,
+      0 0 0 0.5rem rgba(47, 106, 136, 0.6),
+      0 0.8rem 0 rgba(20, 60, 90, 0.4),
+      0 1rem 2rem rgba(0, 0, 0, 0.35);
+    animation: claimPulse 1.6s ease-in-out infinite alternate;
+  }
+
+  &[data-state='locked'],
+  &[data-state='exhausted'] {
+    background: linear-gradient(180deg, #DCDCDC 0%, #B5B5B5 100%);
+    color: rgba(29, 53, 87, 0.55);
+    box-shadow:
+      0 0 0 0.25rem rgba(255, 255, 255, 0.7),
+      0 0.4rem 0 rgba(140, 140, 140, 0.4);
+    cursor: not-allowed;
+    filter: grayscale(0.5);
+  }
+
+  &:not([disabled]):active {
+    transform: translateY(0.4rem);
+  }
+}
+
+@keyframes fullPulse {
+  from { filter: brightness(1); }
+  to   { filter: brightness(1.2); }
+}
+
+@keyframes claimPulse {
+  from { transform: translateY(0)         scale(1); }
+  to   { transform: translateY(-0.3rem)   scale(1.02); }
+}

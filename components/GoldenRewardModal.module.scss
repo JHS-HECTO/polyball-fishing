@@ -52,11 +52,36 @@
 
   &__cta {
     margin-top: var(--space-3);
-    background: var(--colors-gold);
-    color: var(--colors-deep2);
-    font-size: 1.6rem;
-    font-weight: 800;
+    background: linear-gradient(180deg, #FFE680 0%, #FFCC33 55%, #E89B00 100%);
+    color: #1D3557;
+    font-size: 1.7rem;
+    font-weight: 900;
     padding: var(--space-3) var(--space-5);
+    border-radius: 1.6rem;
+    box-shadow:
+      0 0 0 0.3rem #FFFFFF,
+      0 0 0 0.55rem rgba(232, 155, 0, 0.6),
+      0 0.8rem 0 rgba(180, 110, 0, 0.4),
+      0 1rem 2rem rgba(0, 0, 0, 0.3);
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 120ms ease;
+
+    &:active { transform: translateY(0.4rem); }
+  }
+
+  &__skip {
+    margin-top: var(--space-2);
+    background: transparent;
+    color: var(--colors-text-soft);
+    font-size: 1.3rem;
+    font-weight: 700;
+    padding: var(--space-1) var(--space-4);
     border-radius: var(--radius-pill);
+    border: none;
+    cursor: pointer;
+
+    &:active { opacity: 0.6; }
   }
 }

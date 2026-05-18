@@ -23,12 +23,15 @@ import {
 import { vibrate } from 'lib/haptics';
 import {
   sendPlayAd,
+  sendPlayAdRewarded,
   sendReady,
-  sendTicketReward,
+  sendClaimTicket,
   sendScoreUpdate,
   onMessage,
   type FishParentMessage,
 } from 'lib/postMessage';
+import { PROGRESS_TARGET, TICKETS_PER_DAY } from 'lib/gameState';
+import { TicketProgress } from 'components/TicketProgress';
 import type { FishGrade, FishSpecies } from 'lib/types';
 import styles from './page.module.scss';
 
@@ -51,6 +54,11 @@ export default function PlayPage() {
   const resetCastsSinceAd = useGameStore((s) => s.resetCastsSinceAd);
 
   const registerPlayer = useGameStore((s) => s.registerPlayer);
+  const bumpProgress = useGameStore((s) => s.bumpProgress);
+  const registerTicketClaimed = useGameStore((s) => s.registerTicketClaimed);
+  const syncDailyState = useGameStore((s) => s.syncDailyState);
+  const progressScore = useGameStore((s) => s.progressScore);
+  const ticketsClaimedToday = useGameStore((s) => s.ticketsClaimedToday);
 
   const [phase, setPhase] = useState<Phase>('idle');
   const [grade, setGrade] = useState<FishGrade>('trash');
@@ -58,15 +66,16 @@ export default function PlayPage() {
   const [lastOutcome, setLastOutcome] = useState<'caught' | 'escaped' | 'broken'>('caught');
   const [showSplash, setShowSplash] = useState(false);
   const [showReward, setShowReward] = useState(false);
-  const pendingTicketTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [claiming, setClaiming] = useState(false);
+  const [claimSuccess, setClaimSuccess] = useState(false);
   const chamjilTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // Tell parent we're ready to receive FISH:SET_PLAYER injection.
+    syncDailyState(todayString());
     sendReady();
-  }, []);
+  }, [syncDailyState]);
 
   useEffect(() => {
     const cleanup = onMessage((msg: FishParentMessage) => {
@@ -79,16 +88,45 @@ export default function PlayPage() {
       if (msg.type === 'FISH:AD_COMPLETED' || msg.type === 'FISH:AD_FAILED') {
         setPhase('idle');
       }
+      if (msg.type === 'FISH:AD_REWARDED_COMPLETED') {
+        // Ad watched → request actual ticket grant.
+        sendClaimTicket(msg.reason, true);
+      }
+      if (msg.type === 'FISH:AD_REWARDED_FAILED') {
+        setClaiming(false);
+      }
       if (msg.type === 'FISH:TICKET_GRANTED') {
-        if (pendingTicketTimer.current) clearTimeout(pendingTicketTimer.current);
+        registerTicketClaimed();
+        setClaiming(false);
+        setClaimSuccess(true);
         setShowReward(true);
       }
       if (msg.type === 'FISH:TICKET_REJECTED') {
-        if (pendingTicketTimer.current) clearTimeout(pendingTicketTimer.current);
+        setClaiming(false);
       }
     });
     return cleanup;
-  }, [registerPlayer]);
+  }, [registerPlayer, registerTicketClaimed]);
+
+  // Progress claim handler used by both pages — gated by adWatched count.
+  const onClaim = () => {
+    if (claiming) return;
+    if (ticketsClaimedToday >= TICKETS_PER_DAY) return;
+    setClaiming(true);
+    if (ticketsClaimedToday === 0) {
+      sendClaimTicket('progress', false);
+      setTimeout(() => setClaiming(false), 1500);
+    } else {
+      sendPlayAdRewarded('progress');
+    }
+  };
+
+  // Golden-fish ad-gated claim (triggered from GoldenRewardModal).
+  const onClaimGolden = () => {
+    if (claiming) return;
+    setClaiming(true);
+    sendPlayAdRewarded('golden');
+  };
 
   const startCast = () => {
     if (phase !== 'idle') return;
@@ -135,18 +173,13 @@ export default function PlayPage() {
     if (result === 'caught') {
       const cfg = gradeConfig(grade);
       addScore(cfg.score);
+      bumpProgress(cfg.score);
       incrementFish(todayString());
 
       sendScoreUpdate(useGameStore.getState().totalScore);
 
-      if (grade === 'golden') {
-        sendTicketReward({ count: 1, fish: 'golden' });
-        pendingTicketTimer.current = setTimeout(() => {
-          // timeout: treat as rejected (no reward modal)
-        }, TICKET_TIMEOUT_MS);
-      }
-
-      // Caught: play splash+leap sequence before showing the result modal.
+      // Golden ticket is now gated by a separate rewarded-ad popup that the
+      // user triggers from the GoldenRewardModal — we don't auto-grant.
       setPhase('catchAnim');
       return;
     }
@@ -155,12 +188,18 @@ export default function PlayPage() {
   };
 
   const onCatchAnimDone = () => {
-    setPhase('result');
+    if (grade === 'golden') {
+      // Golden caught → show ad-prompt modal (player decides to watch ad).
+      setClaimSuccess(false);
+      setShowReward(true);
+      setPhase('reward');
+    } else {
+      setPhase('result');
+    }
   };
 
   const closeResult = () => {
     setPhase('idle');
-    if (showReward) return;
     if (useGameStore.getState().castsSinceAd >= ADS_EVERY) {
       resetCastsSinceAd();
       setPhase('ad');
@@ -170,12 +209,18 @@ export default function PlayPage() {
 
   const closeReward = () => {
     setShowReward(false);
+    setClaimSuccess(false);
     setPhase('idle');
     if (useGameStore.getState().castsSinceAd >= ADS_EVERY) {
       resetCastsSinceAd();
       setPhase('ad');
       sendPlayAd();
     }
+  };
+
+  const declineGolden = () => {
+    // User chose not to watch ad — close without claiming.
+    closeReward();
   };
 
   void castsSinceAd; // counter exists for ad gating but no HUD displays it
@@ -194,6 +239,9 @@ export default function PlayPage() {
   void totalScore;
   void setTotalScore;
 
+  const ticketsExhausted = ticketsClaimedToday >= TICKETS_PER_DAY;
+  const ticketsNeedAd = ticketsClaimedToday >= 1;
+
   return (
     <main className={styles.play}>
       <Lake>
@@ -205,6 +253,18 @@ export default function PlayPage() {
           <CatchSequence grade={grade} species={species} onComplete={onCatchAnimDone} />
         )}
       </Lake>
+
+      <div className={styles.play__hudWrap}>
+        <TicketProgress
+          compact
+          progress={progressScore / PROGRESS_TARGET}
+          ticketsClaimed={ticketsClaimedToday}
+          ticketsMax={TICKETS_PER_DAY}
+          needsAd={ticketsNeedAd}
+          exhausted={ticketsExhausted}
+          onClaim={onClaim}
+        />
+      </div>
 
       <div className={styles.play__castWrap}>
         {phase === 'bite' ? (
@@ -249,7 +309,15 @@ export default function PlayPage() {
           )
         )}
         {showReward && (
-          <GoldenRewardModal count={1} onClose={closeReward} />
+          claimSuccess ? (
+            <GoldenRewardModal mode="granted" count={1} onClose={closeReward} />
+          ) : (
+            <GoldenRewardModal
+              mode="ad-prompt"
+              onWatchAd={onClaimGolden}
+              onDecline={declineGolden}
+            />
+          )
         )}
       </AnimatePresence>
     </main>
