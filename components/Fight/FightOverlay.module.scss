@@ -23,7 +23,7 @@
     top: 0;
     left: 0;
     right: 0;
-    height: 18vh;
+    height: 18cqh;
     background:
       radial-gradient(ellipse 50% 100% at 50% 0%, rgba(255, 248, 200, 0.25), transparent 70%);
     pointer-events: none;
@@ -37,7 +37,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 22vh;
+    height: 22cqh;
     background: linear-gradient(180deg, transparent 0%, rgba(10, 30, 55, 0.4) 100%);
     pointer-events: none;
     z-index: 1;
@@ -200,7 +200,7 @@
   // pull direction. Sits above the fish silhouette, flips left/right.
   &__guide {
     position: absolute;
-    top: 16vh;
+    top: 16cqh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -210,8 +210,8 @@
     transition: left 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
                 right 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
 
-    &[data-dir='left']  { left: 6vw;  right: auto; }
-    &[data-dir='right'] { right: 6vw; left: auto; }
+    &[data-dir='left']  { left: 6cqw;  right: auto; }
+    &[data-dir='right'] { right: 6cqw; left: auto; }
   }
 
   &__guideArrow {
@@ -270,8 +270,8 @@
     position: absolute;
     top: 50%;
     left: 50%;
-    width: 140vw;
-    height: 140vw;
+    width: 140cqw;
+    height: 140cqw;
     transform: translate(-50%, -50%);
     background:
       conic-gradient(
@@ -376,7 +376,7 @@
   0%   { transform: translateY(0)         translateX(0); opacity: 0; }
   10%  { opacity: 0.7; }
   90%  { opacity: 0.6; }
-  100% { transform: translateY(-110vh)    translateX(2rem); opacity: 0; }
+  100% { transform: translateY(-110cqh)    translateX(2rem); opacity: 0; }
 }
 
 @keyframes vortexSpin {

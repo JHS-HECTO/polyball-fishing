@@ -40,14 +40,14 @@
   // returns, so each fish 'turns around' naturally instead of teleporting.
 
   &[data-fish='1'] {
-    top: 32vh;
+    top: 32cqh;
     width: 4rem;
     height: 1.5rem;
     opacity: 0.9;
     animation: swim1 22s linear infinite;
   }
   &[data-fish='2'] {
-    top: 42vh;
+    top: 42cqh;
     width: 2.8rem;
     height: 1.1rem;
     opacity: 0.75;
@@ -55,7 +55,7 @@
     &::after { animation-duration: 0.4s; }
   }
   &[data-fish='3'] {
-    top: 52vh;
+    top: 52cqh;
     width: 5.2rem;
     height: 1.8rem;
     opacity: 1;
@@ -63,14 +63,14 @@
     &::after { animation-duration: 0.6s; }
   }
   &[data-fish='4'] {
-    top: 58vh;
+    top: 58cqh;
     width: 3.2rem;
     height: 1.2rem;
     opacity: 0.7;
     animation: swim4 19s linear infinite;
   }
   &[data-fish='5'] {
-    top: 36vh;
+    top: 36cqh;
     width: 3.6rem;
     height: 1.3rem;
     opacity: 0.8;
@@ -87,37 +87,37 @@
 // Each swim keyframe: drift across, briefly pause at edge with scaleX flip,
 // drift back. Slight vertical wander on the way for natural feel.
 @keyframes swim1 {
-  0%   { transform: translate(-20vw, 0)     scaleX(1); }
-  46%  { transform: translate(100vw, -2vh)  scaleX(1); }
-  50%  { transform: translate(100vw, -2vh)  scaleX(-1); }
-  96%  { transform: translate(-20vw, 1vh)   scaleX(-1); }
-  100% { transform: translate(-20vw, 0)     scaleX(1); }
+  0%   { transform: translate(-20cqw, 0)     scaleX(1); }
+  46%  { transform: translate(100cqw, -2cqh)  scaleX(1); }
+  50%  { transform: translate(100cqw, -2cqh)  scaleX(-1); }
+  96%  { transform: translate(-20cqw, 1cqh)   scaleX(-1); }
+  100% { transform: translate(-20cqw, 0)     scaleX(1); }
 }
 @keyframes swim2 {
-  0%   { transform: translate(110vw, 0)    scaleX(-1); }
-  46%  { transform: translate(-15vw, 2vh)  scaleX(-1); }
-  50%  { transform: translate(-15vw, 2vh)  scaleX(1); }
-  96%  { transform: translate(110vw, -1vh) scaleX(1); }
-  100% { transform: translate(110vw, 0)    scaleX(-1); }
+  0%   { transform: translate(110cqw, 0)    scaleX(-1); }
+  46%  { transform: translate(-15cqw, 2cqh)  scaleX(-1); }
+  50%  { transform: translate(-15cqw, 2cqh)  scaleX(1); }
+  96%  { transform: translate(110cqw, -1cqh) scaleX(1); }
+  100% { transform: translate(110cqw, 0)    scaleX(-1); }
 }
 @keyframes swim3 {
-  0%   { transform: translate(-25vw, 1vh)  scaleX(1); }
-  48%  { transform: translate(110vw, -1vh) scaleX(1); }
-  52%  { transform: translate(110vw, -1vh) scaleX(-1); }
-  98%  { transform: translate(-25vw, 0)    scaleX(-1); }
-  100% { transform: translate(-25vw, 1vh)  scaleX(1); }
+  0%   { transform: translate(-25cqw, 1cqh)  scaleX(1); }
+  48%  { transform: translate(110cqw, -1cqh) scaleX(1); }
+  52%  { transform: translate(110cqw, -1cqh) scaleX(-1); }
+  98%  { transform: translate(-25cqw, 0)    scaleX(-1); }
+  100% { transform: translate(-25cqw, 1cqh)  scaleX(1); }
 }
 @keyframes swim4 {
-  0%   { transform: translate(110vw, 0)    scaleX(-1); }
-  45%  { transform: translate(-20vw, -2vh) scaleX(-1); }
-  50%  { transform: translate(-20vw, -2vh) scaleX(1); }
-  95%  { transform: translate(110vw, 1vh)  scaleX(1); }
-  100% { transform: translate(110vw, 0)    scaleX(-1); }
+  0%   { transform: translate(110cqw, 0)    scaleX(-1); }
+  45%  { transform: translate(-20cqw, -2cqh) scaleX(-1); }
+  50%  { transform: translate(-20cqw, -2cqh) scaleX(1); }
+  95%  { transform: translate(110cqw, 1cqh)  scaleX(1); }
+  100% { transform: translate(110cqw, 0)    scaleX(-1); }
 }
 @keyframes swim5 {
-  0%   { transform: translate(-25vw, 0)    scaleX(1); }
-  47%  { transform: translate(110vw, 2vh)  scaleX(1); }
-  51%  { transform: translate(110vw, 2vh)  scaleX(-1); }
-  97%  { transform: translate(-25vw, -1vh) scaleX(-1); }
-  100% { transform: translate(-25vw, 0)    scaleX(1); }
+  0%   { transform: translate(-25cqw, 0)    scaleX(1); }
+  47%  { transform: translate(110cqw, 2cqh)  scaleX(1); }
+  51%  { transform: translate(110cqw, 2cqh)  scaleX(-1); }
+  97%  { transform: translate(-25cqw, -1cqh) scaleX(-1); }
+  100% { transform: translate(-25cqw, 0)    scaleX(1); }
 }
