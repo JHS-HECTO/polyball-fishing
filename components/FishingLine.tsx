@@ -1,40 +1,68 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
 import styles from './FishingLine.module.scss';
 
 type Props = {
   visible: boolean;
+  /** CSS selector for the rod-tip anchor (typically the angler container). */
+  fromSelector?: string;
+  /** CSS selector for the bobber anchor. */
+  toSelector?: string;
 };
 
-// Subtle line drawn from the rod tip (approximated above the centered angler)
-// down to the bobber's rest position. Shown only when the bobber is on the
-// water (floating/bite). Uses an SVG line so we can use a dashed stroke and
-// soft drop-shadow that match the AC-cozy tone.
-//
-// Coordinates are in viewport-percent so they track resize. Tuned for the
-// centered angler + bobber positioned at top: 47vh / left: 50% (+0.5rem).
-export function FishingLine({ visible }: Props) {
+// Measures the actual rendered positions of the rod-tip and bobber elements
+// each animation frame and stretches an SVG <line> between them so the line
+// stays attached even as the bobber animates.
+export function FishingLine({
+  visible,
+  fromSelector = '[data-anchor="rod-tip"]',
+  toSelector = '[data-anchor="bobber"]',
+}: Props) {
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [coords, setCoords] = useState<{ x1: number; y1: number; x2: number; y2: number } | null>(null);
+
+  useEffect(() => {
+    if (!visible) return;
+    let rafId = 0;
+    const measure = () => {
+      const a = document.querySelector(fromSelector);
+      const b = document.querySelector(toSelector);
+      const svg = svgRef.current;
+      if (a && b && svg) {
+        const ar = a.getBoundingClientRect();
+        const br = b.getBoundingClientRect();
+        const host = svg.getBoundingClientRect();
+        // Rod tip is roughly at the top of the angler container, slightly
+        // right of horizontal center (the rod extends up-right from the hand).
+        const x1 = ar.left + ar.width * 0.62 - host.left;
+        const y1 = ar.top + ar.height * 0.18 - host.top;
+        const x2 = br.left + br.width / 2 - host.left;
+        const y2 = br.top + br.height / 2 - host.top;
+        setCoords({ x1, y1, x2, y2 });
+      }
+      rafId = requestAnimationFrame(measure);
+    };
+    rafId = requestAnimationFrame(measure);
+    return () => cancelAnimationFrame(rafId);
+  }, [visible, fromSelector, toSelector]);
+
   if (!visible) return null;
+
   return (
-    <svg
-      className={styles.line}
-      preserveAspectRatio="none"
-      viewBox="0 0 100 100"
-      aria-hidden
-    >
-      {/* Rod tip is roughly above & slightly right of the angler's head.
-          Angler centered, height 22rem with bottom 9vh — head sits around y ~73vh.
-          Rod extends up-right, tip approx (58vw, 65vh). */}
-      <line
-        x1="58"
-        y1="65"
-        x2="50.6"
-        y2="47"
-        stroke="rgba(255,255,255,0.9)"
-        strokeWidth="0.3"
-        strokeDasharray="0.6 0.6"
-        vectorEffect="non-scaling-stroke"
-      />
+    <svg ref={svgRef} className={styles.line} aria-hidden>
+      {coords && (
+        <line
+          x1={coords.x1}
+          y1={coords.y1}
+          x2={coords.x2}
+          y2={coords.y2}
+          stroke="rgba(255, 255, 255, 0.95)"
+          strokeWidth="1.5"
+          strokeDasharray="4 3"
+          vectorEffect="non-scaling-stroke"
+        />
+      )}
     </svg>
   );
 }

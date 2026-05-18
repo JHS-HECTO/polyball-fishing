@@ -14,7 +14,7 @@ type Props = { castedRod: boolean };
 // transform property so we keep these two responsibilities on separate nodes.
 export function Angler({ castedRod }: Props) {
   return (
-    <div className={styles.angler}>
+    <div className={styles.angler} data-anchor="rod-tip">
       <MotionDiv
         className={styles.angler__inner}
         animate={{

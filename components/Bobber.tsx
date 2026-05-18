@@ -57,6 +57,7 @@ export function Bobber({ state }: Props) {
   return (
     <MotionDiv
       className={styles.bobber}
+      data-anchor="bobber"
       variants={variants}
       initial={false}
       animate={state}
