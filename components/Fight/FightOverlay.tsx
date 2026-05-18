@@ -25,8 +25,8 @@ const DIR_CHANGE_RANGE_MS: Record<FishGrade, [number, number]> = {
   trash:  [1100, 1600],
   normal: [950, 1500],
   rare:   [800, 1300],
-  big:    [700, 1100],
-  golden: [800, 1300],
+  big:    [900, 1400],
+  golden: [1000, 1500],
 };
 
 // Tug events — fish makes a sudden hard pull. More for bigger fish.
@@ -34,8 +34,8 @@ const TUG_RANGE_MS: Record<FishGrade, [number, number]> = {
   trash:  [12000, 15000],  // basically none
   normal: [5500, 8000],
   rare:   [3500, 5500],
-  big:    [2800, 4500],
-  golden: [3000, 5000],
+  big:    [4000, 6000],
+  golden: [4500, 7000],
 };
 const TUG_DURATION_MS = 700;
 const TUG_TENSION_RATE_MULT = 2.6;

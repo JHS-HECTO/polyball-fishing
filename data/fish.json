@@ -46,10 +46,10 @@
       "grade": "big",
       "probability": 0.045,
       "score": 500,
-      "staminaUpPerSec": 17,
-      "staminaDownPerSec": 12,
-      "tensionUpPerSec": 22,
-      "tensionDownPerSec": 12,
+      "staminaUpPerSec": 23,
+      "staminaDownPerSec": 9,
+      "tensionUpPerSec": 17,
+      "tensionDownPerSec": 15,
       "species": [
         { "id": "big-1", "name": "대형 잉어", "grade": "big", "image": "/images/12-big-ingeo.png" },
         { "id": "big-2", "name": "대형 배스", "grade": "big", "image": "/images/13-big-bass.png" }
@@ -59,10 +59,10 @@
       "grade": "golden",
       "probability": 0.005,
       "score": 2000,
-      "staminaUpPerSec": 18,
-      "staminaDownPerSec": 11,
-      "tensionUpPerSec": 22,
-      "tensionDownPerSec": 14,
+      "staminaUpPerSec": 25,
+      "staminaDownPerSec": 8,
+      "tensionUpPerSec": 17,
+      "tensionDownPerSec": 16,
       "species": [
         { "id": "golden-1", "name": "황금 잉어", "grade": "golden", "image": "/images/14-golden.png" }
       ]

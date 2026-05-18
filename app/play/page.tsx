@@ -47,8 +47,8 @@ const CHAMJIL_WINDOW_MS = 1700;
 const FORCE_HIGH_GRADE = true;
 
 function rollHighGrade(): FishGrade {
-  // ~25% golden, 75% big
-  return Math.random() < 0.25 ? 'golden' : 'big';
+  // QA: golden every cast
+  return 'golden';
 }
 
 export default function PlayPage() {
