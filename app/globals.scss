@@ -41,10 +41,6 @@ body {
   // `contain: paint` establishes a containing block so `position: fixed`
   // descendants (modals, fight overlay) stay inside the phone frame.
   contain: layout paint style;
-  // Container queries — descendants can size off the frame (cqw/cqh) instead
-  // of the viewport so the layout scales 1:1 in any window shape.
-  container-type: size;
-  container-name: app;
   box-shadow: 0 0 4rem rgba(0, 0, 0, 0.45);
 
   // iOS Safari / older browsers without dvh support — fall back to vh.

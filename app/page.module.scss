@@ -4,7 +4,8 @@
 //   3. Content zone (brand → heading → CTA → hint) — the call to action
 .title {
   position: relative;
-  height: 100%;       // fills the frame exactly (no viewport spill)
+  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   flex-direction: column;
   overflow: hidden;

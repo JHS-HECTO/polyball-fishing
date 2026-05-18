@@ -22,7 +22,7 @@
   // upper-right corner. Position tuned for the prompt's "sun in upper right".
   &__sunGlow {
     position: absolute;
-    top: 4cqh;
+    top: 4vh;
     right: -4rem;
     width: 18rem;
     height: 18rem;
@@ -35,13 +35,13 @@
   }
 
   // Lake surface shimmer — drifting soft highlights that cover only the
-  // water band (roughly 26cqh ~ 73cqh from top per the prompt's vertical split).
+  // water band (roughly 26vh ~ 73vh from top per the prompt's vertical split).
   &__shimmer {
     position: absolute;
-    top: 26cqh;
+    top: 26vh;
     left: 0;
     right: 0;
-    height: 47cqh;
+    height: 47vh;
     background:
       radial-gradient(ellipse 18rem 1.2rem at 25% 30%, rgba(255, 255, 255, 0.35), transparent 70%),
       radial-gradient(ellipse 14rem 1rem  at 70% 55%, rgba(255, 255, 255, 0.28), transparent 70%),
@@ -68,10 +68,10 @@
     opacity: 0;
     z-index: 2;
   }
-  &__ambientRipple  { top: 38cqh; left: 18%; animation: ambientRipple 9s ease-out infinite; }
-  &__ambientRipple2 { top: 55cqh; left: 62%; animation: ambientRipple 11s ease-out 3.5s infinite; }
-  &__ambientRipple3 { top: 46cqh; left: 78%; animation: ambientRipple 13s ease-out 7s infinite; width: 5rem; height: 1.6rem; }
-  &__ambientRipple4 { top: 60cqh; left: 28%; animation: ambientRipple 10s ease-out 5s infinite; width: 6rem; height: 1.8rem; }
+  &__ambientRipple  { top: 38vh; left: 18%; animation: ambientRipple 9s ease-out infinite; }
+  &__ambientRipple2 { top: 55vh; left: 62%; animation: ambientRipple 11s ease-out 3.5s infinite; }
+  &__ambientRipple3 { top: 46vh; left: 78%; animation: ambientRipple 13s ease-out 7s infinite; width: 5rem; height: 1.6rem; }
+  &__ambientRipple4 { top: 60vh; left: 28%; animation: ambientRipple 10s ease-out 5s infinite; width: 6rem; height: 1.8rem; }
 
   // Slow-drifting cloud overlay across the sky band so the scene reads as
   // moving even when nothing else is happening. Two layers at different
@@ -79,7 +79,7 @@
   &__cloud1,
   &__cloud2 {
     position: absolute;
-    top: 5cqh;
+    top: 5vh;
     left: -20%;
     width: 24rem;
     height: 6rem;
@@ -91,16 +91,16 @@
     z-index: 1;
     filter: blur(0.2rem);
   }
-  &__cloud1 { top: 6cqh; animation: cloudDrift 90s linear infinite; }
-  &__cloud2 { top: 14cqh; animation: cloudDrift 140s linear infinite 30s; opacity: 0.7; transform: scale(0.7); }
+  &__cloud1 { top: 6vh; animation: cloudDrift 90s linear infinite; }
+  &__cloud2 { top: 14vh; animation: cloudDrift 140s linear infinite 30s; opacity: 0.7; transform: scale(0.7); }
 
   // Subtle light beam through the sky — adds depth.
   &__lightBeam {
     position: absolute;
     top: 0;
-    right: 6cqw;
+    right: 6vw;
     width: 18rem;
-    height: 28cqh;
+    height: 28vh;
     background: linear-gradient(180deg, rgba(255, 240, 200, 0.25), transparent 100%);
     pointer-events: none;
     z-index: 1;
@@ -135,7 +135,7 @@
 
 @keyframes cloudDrift {
   from { transform: translateX(0); }
-  to   { transform: translateX(140cqw); }
+  to   { transform: translateX(140vw); }
 }
 
 @keyframes lightBeamPulse {
