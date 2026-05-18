@@ -16,6 +16,90 @@
     user-select: none;
   }
 
+  // Floating golden fish hero — the visual hook that says "catch me for a
+  // raffle ticket". Sits centered upper-mid of the screen above the heading.
+  &__hero {
+    position: absolute;
+    left: 50%;
+    top: 18vh;
+    width: 22rem;
+    height: 22rem;
+    transform: translateX(-50%);
+    pointer-events: none;
+    z-index: 2;
+    filter: drop-shadow(0 1rem 2rem rgba(0, 0, 0, 0.35));
+  }
+
+  &__heroImg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    user-select: none;
+    z-index: 2;
+  }
+
+  // Warm halo behind the fish.
+  &__heroGlow {
+    position: absolute;
+    inset: -4rem;
+    background: radial-gradient(circle at center, rgba(255, 217, 61, 0.55), transparent 60%);
+    z-index: 1;
+    animation: heroGlowPulse 3s ease-in-out infinite alternate;
+    mix-blend-mode: screen;
+  }
+
+  // Slowly rotating sparkle ring overlay.
+  &__heroSparkle {
+    position: absolute;
+    inset: -3rem;
+    width: calc(100% + 6rem);
+    height: calc(100% + 6rem);
+    object-fit: contain;
+    opacity: 0.65;
+    animation: heroSparkleSpin 9s linear infinite;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  // Floating raffle ticket near the fish — bottom-right of the hero area.
+  &__ticket {
+    position: absolute;
+    top: 32vh;
+    left: 64%;
+    width: 8rem;
+    height: 6rem;
+    z-index: 3;
+    pointer-events: none;
+    filter: drop-shadow(0 0.6rem 1.2rem rgba(0, 0, 0, 0.3));
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      user-select: none;
+    }
+  }
+
+  // Bottom darkening fade so text + button pop against the pastel scene.
+  &__contentFade {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 55vh;
+    background: linear-gradient(
+      180deg,
+      transparent 0%,
+      rgba(29, 53, 87, 0.05) 30%,
+      rgba(29, 53, 87, 0.45) 70%,
+      rgba(29, 53, 87, 0.7) 100%
+    );
+    pointer-events: none;
+    z-index: 3;
+  }
+
   &__content {
     position: absolute;
     inset: 0;
@@ -23,55 +107,122 @@
     flex-direction: column;
     align-items: center;
     justify-content: flex-end;
-    padding: var(--space-5) var(--space-5) 12vh;
+    padding: var(--space-5) var(--space-5) 10vh;
     text-align: center;
     gap: var(--space-3);
+    z-index: 4;
   }
 
   &__heading {
-    font-size: 4.8rem;
-    font-weight: 800;
+    font-size: 5.2rem;
+    font-weight: 900;
     margin: 0;
-    color: white;
+    color: #FFFFFF;
     letter-spacing: -0.05em;
     text-shadow:
-      0 0.4rem 1.2rem rgba(0, 0, 0, 0.4),
-      0 0 2rem rgba(0, 0, 0, 0.15);
+      0 0.2rem 0 rgba(29, 53, 87, 0.95),
+      0 0.4rem 0 rgba(29, 53, 87, 0.9),
+      0 0.6rem 1.6rem rgba(0, 0, 0, 0.65),
+      0 0 2.4rem rgba(255, 217, 61, 0.35);
   }
 
   &__subtitle {
-    font-size: 1.6rem;
-    color: rgba(255, 255, 255, 0.95);
+    display: inline-block;
     margin: 0;
-    text-shadow: 0 0.2rem 0.6rem rgba(0, 0, 0, 0.4);
-    font-weight: 600;
+    padding: var(--space-2) var(--space-4);
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: #1D3557;
+    background: rgba(255, 255, 255, 0.92);
+    border-radius: var(--radius-pill);
+    box-shadow: 0 0.4rem 1.2rem rgba(0, 0, 0, 0.25);
+    letter-spacing: -0.01em;
   }
 
   &__actions {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-    margin-top: var(--space-5);
-    width: min(28rem, 80vw);
+    margin-top: var(--space-4);
+    width: min(30rem, 84vw);
   }
 
+  // Upgraded CTA — gradient body, gold ring, pulse glow, press feedback.
   &__cta {
-    background: var(--colors-deep1);
+    position: relative;
+    background: linear-gradient(180deg, #5BA0C8 0%, #2F6A88 100%);
     color: white;
-    font-size: 1.8rem;
-    font-weight: 700;
+    font-size: 2rem;
+    font-weight: 800;
     padding: var(--space-3) var(--space-5);
     border-radius: var(--radius-pill);
     text-align: center;
+    overflow: hidden;
+    box-shadow:
+      0 0 0 0.3rem rgba(255, 217, 61, 0.55),
+      0 0.6rem 2rem rgba(0, 0, 0, 0.35),
+      inset 0 0.2rem 0 rgba(255, 255, 255, 0.25);
+    letter-spacing: 0.04em;
+    transition: transform 140ms ease, box-shadow 140ms ease;
+    isolation: isolate;
+    animation: ctaPulse 2.4s ease-in-out infinite alternate;
+
+    &:active {
+      transform: scale(0.96);
+      box-shadow:
+        0 0 0 0.3rem rgba(255, 217, 61, 0.7),
+        0 0.2rem 0.6rem rgba(0, 0, 0, 0.35),
+        inset 0 0.2rem 0 rgba(255, 255, 255, 0.25);
+    }
   }
 
-  &__secondary {
-    background: rgba(255, 255, 255, 0.7);
-    color: var(--colors-deep2);
-    font-size: 1.5rem;
-    font-weight: 600;
-    padding: var(--space-3) var(--space-5);
-    border-radius: var(--radius-pill);
-    text-align: center;
+  &__ctaText {
+    position: relative;
+    z-index: 2;
   }
+
+  // Sliding sheen highlight on the button — subtle "shiny" feel.
+  &__ctaGlow {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      120deg,
+      transparent 30%,
+      rgba(255, 255, 255, 0.55) 50%,
+      transparent 70%
+    );
+    transform: translateX(-100%);
+    animation: ctaSheen 3.6s ease-in-out infinite;
+    z-index: 1;
+    pointer-events: none;
+  }
+}
+
+@keyframes heroGlowPulse {
+  from { opacity: 0.55; transform: scale(0.95); }
+  to   { opacity: 1;    transform: scale(1.08); }
+}
+
+@keyframes heroSparkleSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes ctaPulse {
+  from { box-shadow:
+    0 0 0 0.3rem rgba(255, 217, 61, 0.45),
+    0 0.6rem 1.6rem rgba(0, 0, 0, 0.3),
+    inset 0 0.2rem 0 rgba(255, 255, 255, 0.25);
+  }
+  to   { box-shadow:
+    0 0 0 0.5rem rgba(255, 217, 61, 0.75),
+    0 0.8rem 2.2rem rgba(0, 0, 0, 0.4),
+    inset 0 0.2rem 0 rgba(255, 255, 255, 0.3);
+  }
+}
+
+@keyframes ctaSheen {
+  0%,  30% { transform: translateX(-100%); }
+  60%      { transform: translateX(120%); }
+  100%     { transform: translateX(120%); }
 }

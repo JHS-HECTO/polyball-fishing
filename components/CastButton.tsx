@@ -16,7 +16,8 @@ export function CastButton({ onClick, disabled = false, label = '캐스팅!' }: 
       onClick={onClick}
       disabled={disabled}
     >
-      {label}
+      <span className={styles.cast__text}>{label}</span>
+      <span className={styles.cast__sheen} aria-hidden />
     </button>
   );
 }
