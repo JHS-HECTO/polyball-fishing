@@ -1,7 +1,8 @@
-type HapticEvent = 'bite' | 'goodHit' | 'badHit' | 'lineBreak' | 'fishCaught' | 'goldenCatch';
+type HapticEvent = 'bite' | 'fishBite' | 'goodHit' | 'badHit' | 'lineBreak' | 'fishCaught' | 'goldenCatch';
 
 const PATTERNS: Record<HapticEvent, number | number[]> = {
-  bite: 30,
+  bite: 30,                                  // light buzz — used for taps & heartbeat
+  fishBite: [90, 50, 90, 50, 90, 50, 160],   // strong sustained alert — fish is on the line
   goodHit: 12,
   badHit: [20, 30, 20],
   lineBreak: [40, 30, 80],

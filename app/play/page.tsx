@@ -154,7 +154,9 @@ export default function PlayPage() {
       const biteAfter = 1000 + Math.random() * 9000; // 1~10s bite window
       setTimeout(() => {
         setPhase('bite');
-        vibrate('bite');
+        // Strong sustained vibration so the player feels the fish biting
+        // even when looking away from the screen.
+        vibrate('fishBite');
         // Hook-set window — player must tap (chamjil button) during this
         // window or the fish gets away.
         chamjilTimer.current = setTimeout(() => {
