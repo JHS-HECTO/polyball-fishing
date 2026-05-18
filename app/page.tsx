@@ -26,22 +26,15 @@ export default function TitlePage() {
         </div>
       </div>
 
-      {/* Hero stage — golden fish with halo + sparkle ring */}
+      {/* Hero stage — golden fish gently floating, no sparkles */}
       <div className={styles.title__stage}>
         <div className={styles.title__stageGlow} aria-hidden />
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/images/18-sparkle.png"
-          alt=""
-          className={styles.title__stageSparkle}
-          draggable={false}
-        />
         <MotionDiv
           className={styles.title__hero}
           animate={{
-            y: [0, -14, 0, 14, 0],
-            x: [0, 8, 0, -8, 0],
-            rotate: [-4, 4, -4],
+            y: [0, -10, 0, 10, 0],
+            x: [0, 6, 0, -6, 0],
+            rotate: [-3, 3, -3],
           }}
           transition={{
             y:      { duration: 4.0, repeat: Infinity, ease: 'easeInOut' },
@@ -52,12 +45,6 @@ export default function TitlePage() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src="/images/14-golden.png" alt="" className={styles.title__heroImg} draggable={false} />
         </MotionDiv>
-
-        {/* Tiny floating sparkles around the hero — pure CSS dots */}
-        <div className={styles.title__dot} data-i="1" aria-hidden />
-        <div className={styles.title__dot} data-i="2" aria-hidden />
-        <div className={styles.title__dot} data-i="3" aria-hidden />
-        <div className={styles.title__dot} data-i="4" aria-hidden />
       </div>
 
       {/* Bottom action zone */}
